@@ -235,8 +235,8 @@
                 emptyFeed: "No confirmed guesses yet. Be the first!",
                 modalTitle: "Guess Received! 🎀",
                 modalDesc: "Please complete your payment on the opened Revolut tab. Your guess will appear on the live leaderboard as soon as payment is confirmed!",
-                placeholderFname: "Troy",
-                placeholderLname: "Parrot",
+                placeholderFname: "Jane",
+                placeholderLname: "Doe",
                 currencySign: "€"
             },
             hr: {
@@ -257,13 +257,13 @@
                 emptyFeed: "Još nema potvrđenih prognoza. Budi prvi!",
                 modalTitle: "Prognoza Zaprimljena! 🎀",
                 modalDesc: "Molimo dovršite uplatu na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim uplata bude potvrđena!",
-                placeholderFname: "Luka",
-                placeholderLname: "Modric",
+                placeholderFname: "Iva",
+                placeholderLname: "Horvat",
                 currencySign: "€"
             },
             pt: {
                 badge: "Jogo do Bebé",
-                title: "Aposta na data de Nascimento 👶🏼✨",
+                title: "Aposta do Nascimento 👶🏼✨",
                 desc: "Adivinhe quando vai nascer a nossa filhinha! Os 3 palpites mais próximos ganham prêmios!",
                 prizesHtml: "<div class='font-bold text-amber-900 mb-1 flex items-center gap-1.5'>🎁 <span>Prémios:</span></div><ul class='space-y-1 text-xs text-slate-600 font-medium'><li>🥇 <strong>1.º Lugar:</strong> Uísque Irlandês 12 Anos 🥃</li><li>🥈 <strong>2.º Lugar:</strong> Cabaz de Produtos Portugueses 🇵🇹</li><li>🥉 <strong>3.º Lugar:</strong> Cabaz de Produtos Croatas 🇭🇷</li></ul>",
                 formHeading: "Deixar Palpite",
@@ -279,8 +279,8 @@
                 emptyFeed: "Ainda não há palpites confirmados. Seja o primeiro!",
                 modalTitle: "Palpite Recebido! 🎀",
                 modalDesc: "Por favor conclua o pagamento no separador do Revolut. O seu palpite aparecerá no painel assim que a doação for confirmada!",
-                placeholderFname: "Eder",
-                placeholderLname: "Lopes",
+                placeholderFname: "Joana",
+                placeholderLname: "Silva",
                 currencySign: "€"
             }
         };
@@ -321,7 +321,6 @@
         function setDonation(amount) {
             document.getElementById('customDonation').value = amount;
             
-            // Visual active button toggle
             const btns = document.querySelectorAll('.donation-btn');
             btns.forEach(btn => {
                 if(btn.innerText === '€' + amount) {
@@ -344,6 +343,34 @@
             document.getElementById('progress-text').innerText = Math.round(progressPercentage) + "%";
         }
 
+        // Helper: Convert Google Sheets serial date number (e.g. 46226) or standard string to JS Date
+        function parseSheetDate(rawDate) {
+            if (!rawDate) return new Date();
+            let str = String(rawDate).trim();
+            if (!isNaN(str)) {
+                // Convert Google Sheets serial number to JavaScript Date
+                const serial = parseFloat(str);
+                const utc_days = Math.floor(serial - 25569);
+                const utc_value = utc_days * 86400;
+                return new Date(utc_value * 1000);
+            }
+            // Parse standard ISO/String date (e.g. "2026-08-15")
+            return new Date(str.replace(/'/g, ''));
+        }
+
+        // Helper: Convert decimal fraction (e.g., 0,3069) back into clean HH:MM format if needed
+        function parseSheetTime(rawTime) {
+            if (!rawTime) return "12:00";
+            let str = String(rawTime).replace(',', '.').trim();
+            if (!isNaN(str) && parseFloat(str) < 1) {
+                const totalSeconds = Math.round(parseFloat(str) * 86400);
+                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                return `${hours}:${minutes}`;
+            }
+            return String(rawTime).replace(/'/g, '');
+        }
+
         async function fetchLiveGuesses() {
             try {
                 const response = await fetch(SHEETDB_URL);
@@ -354,7 +381,6 @@
                 totalDonatedPool = 0;
                 confirmedGuessesCount = 0;
 
-                // Explicit mapping for date formatting locales
                 const localeMap = {
                     en: 'en-US',
                     hr: 'hr-HR',
@@ -362,7 +388,6 @@
                 };
 
                 if (Array.isArray(data) && data.length > 0) {
-                    // Filter ONLY Paid rows
                     const paidEntries = data.filter(entry => entry.status && entry.status.toLowerCase() === 'paid');
 
                     if (paidEntries.length > 0) {
@@ -373,8 +398,10 @@
                             totalDonatedPool += amount;
                             confirmedGuessesCount++;
 
-                            // Correct locale mapping per language
-                            const formattedDate = new Date(entry.guessedDate).toLocaleDateString(localeMap[currentLang] || 'en-US', { month: 'short', day: 'numeric' });
+                            const parsedDate = parseSheetDate(entry.guessedDate);
+                            const cleanTime = parseSheetTime(entry.guessedTime);
+
+                            const formattedDate = parsedDate.toLocaleDateString(localeMap[currentLang] || 'en-US', { month: 'short', day: 'numeric' });
                             const initials = (entry.firstName[0] || '') + (entry.lastName[0] || '');
 
                             const feedItem = `
@@ -385,7 +412,7 @@
                                         </div>
                                         <div>
                                             <div class="text-sm font-bold text-slate-800">${entry.firstName} ${entry.lastName}</div>
-                                            <div class="text-xs text-slate-500 font-medium">${translations[currentLang].date}: <span class="text-pink-600 font-bold">${formattedDate}</span> @ ${entry.guessedTime}</div>
+                                            <div class="text-xs text-slate-500 font-medium">${translations[currentLang].date}: <span class="text-pink-600 font-bold">${formattedDate}</span> @ ${cleanTime}</div>
                                         </div>
                                     </div>
                                     <span class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs px-2.5 py-1 rounded-full font-extrabold">
@@ -412,31 +439,27 @@
         async function handleSubmit(e) {
             e.preventDefault();
 
+            // Prefix dates/times with apostrophe to FORCE text format in Google Sheets
             const newGuess = {
                 firstName: document.getElementById('input-fname').value,
                 lastName: document.getElementById('input-lname').value,
                 email: document.getElementById('input-email').value,
-                guessedDate: document.getElementById('input-date').value,
-                guessedTime: document.getElementById('input-time').value,
+                guessedDate: "'" + document.getElementById('input-date').value,
+                guessedTime: "'" + document.getElementById('input-time').value,
                 donationValue: parseFloat(document.getElementById('customDonation').value) || 0,
                 status: "Pending"
             };
 
             try {
-                // Post Pending Entry to SheetDB
                 await fetch(SHEETDB_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: [newGuess] })
                 });
 
-                // Open Revolut Link
                 window.open(REAL_PAYMENT_URL, '_blank');
-
-                // Show Confirmation Pop-up
                 document.getElementById('successModal').classList.remove('hidden');
 
-                // Reset Form
                 document.getElementById('babyPoolForm').reset();
                 setDonation(10);
 
