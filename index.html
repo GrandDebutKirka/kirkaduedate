@@ -10,7 +10,6 @@
         .gradient-bg {
             background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 50%, #fae8ff 100%);
         }
-        /* Lock scrolling while language modal is open */
         .modal-active {
             overflow: hidden;
         }
@@ -26,14 +25,14 @@
             <p class="text-sm text-slate-500 mb-6">Odaberite jezik / Escolha o seu idioma</p>
             
             <div class="space-y-3">
-                <button onclick="selectLanguage('en')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
+                <button onclick="selectLanguage('en')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between cursor-pointer">
                     <span>🇺🇸 English</span> <span class="text-xs text-slate-400">➔</span>
                 </button>
-                <button onclick="selectLanguage('hr')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
+                <button onclick="selectLanguage('hr')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between cursor-pointer">
                     <span>🇭🇷 Hrvatski</span> <span class="text-xs text-slate-400">➔</span>
                 </button>
-                <button onclick="selectLanguage('pt')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
-                    <span>🇵🇹 Português (PT)</span> <span class="text-xs text-slate-400">➔</span>
+                <button onclick="selectLanguage('pt')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between cursor-pointer">
+                    <span>🇵🇹 Português</span> <span class="text-xs text-slate-400">➔</span>
                 </button>
             </div>
         </div>
@@ -99,9 +98,9 @@
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <label id="lbl-donation" class="block text-xs font-bold uppercase tracking-wide text-slate-700 mb-2"></label>
                         <div class="grid grid-cols-3 gap-2 mb-3">
-                            <button type="button" onclick="setDonation(5)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">5</button>
-                            <button type="button" onclick="setDonation(10)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">10</button>
-                            <button type="button" onclick="setDonation(20)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">20</button>
+                            <button type="button" onclick="setDonation(5)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white cursor-pointer">€5</button>
+                            <button type="button" onclick="setDonation(10)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white cursor-pointer">€10</button>
+                            <button type="button" onclick="setDonation(20)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white cursor-pointer">€20</button>
                         </div>
                         <input type="number" id="customDonation" min="1" value="10" class="w-full border border-slate-200 rounded-lg p-2 bg-white focus:outline-pink-400 text-sm">
                     </div>
@@ -110,7 +109,7 @@
                     <div class="pt-2 space-y-3">
                         <p id="lbl-revolut-info" class="text-xs text-slate-500 text-center"></p>
                         
-                        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md cursor-pointer text-base">
+                        <button type="submit" id="submitBtn" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md cursor-pointer text-base disabled:opacity-50">
                             <span>🔒</span>
                             <span id="btn-submit-text">Donate & Submit Guess</span>
                         </button>
@@ -123,7 +122,7 @@
             <section class="space-y-6">
                 <div class="bg-white rounded-2xl shadow-xl shadow-pink-100/40 p-6 border border-slate-100">
                     <h2 id="stats-title" class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"></h2>
-                    <div id="stats-total" class="text-3xl font-black text-pink-600">$0.00</div>
+                    <div id="stats-total" class="text-3xl font-black text-pink-600">€0.00</div>
                     <div class="w-full bg-slate-100 rounded-full h-2.5 mt-2">
                         <div id="progress-bar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
@@ -132,21 +131,23 @@
 
                 <div class="bg-white rounded-2xl shadow-xl shadow-pink-100/40 p-6 border border-slate-100">
                     <h2 id="feed-title" class="text-xl font-bold text-slate-900 mb-4"></h2>
-                    <div id="feed-empty-msg" class="text-sm text-slate-400 italic py-4 text-center">No donations or guesses placed yet. Be the first!</div>
+                    <div id="feed-empty-msg" class="text-sm text-slate-400 italic py-4 text-center">Loading live leaderboard...</div>
                     <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto" id="feed"></div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Complete Translation & View Logic -->
+    <!-- Translation & Active SheetDB Logic -->
     <script>
-        // Your official Revolut link
+        // Your active SheetDB API URL
+        const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
+        
+        // Official Revolut payment link
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
-        // Dynamic State Tracker variables starting at 0
         let totalDonatedPool = 0;
-        const targetGoal = 500; // Target goal amount
+        const targetGoal = 500;
 
         const translations = {
             en: {
@@ -168,7 +169,8 @@
                 statsTitle: "📊 Total Donations So Far",
                 statsDesc: "raised towards our daughter's nursery and baby fund!",
                 feedTitle: "📢 Live Leaderboard Standings",
-                alertPrefix: "Thank you! Your guess has been recorded on the live board. Opening Revolut now to complete your donation...",
+                emptyFeed: "No guesses placed yet. Be the first!",
+                alertPrefix: "Thank you! Your guess has been saved to the live leaderboard. Opening Revolut now to complete your donation...",
                 placeholderFname: "Jane",
                 placeholderLname: "Doe",
                 currencySign: "€"
@@ -192,7 +194,8 @@
                 statsTitle: "📊 Ukupno prikupljene donacije",
                 statsDesc: "prikupljeno za dječju sobicu i potrepštine za našu kćer!",
                 feedTitle: "📢 Trenutni poredak uživo",
-                alertPrefix: "Hvala vam! Vaša prognoza je zabilježena. Otvaramo Revolut za dovršetak donacije...",
+                emptyFeed: "Još nema prognoza. Budite prvi!",
+                alertPrefix: "Hvala vam! Vaša prognoza je spremljena. Otvaramo Revolut za dovršetak donacije...",
                 placeholderFname: "Iva",
                 placeholderLname: "Horvat",
                 currencySign: "€"
@@ -216,7 +219,8 @@
                 statsTitle: "📊 Total de Doações até Agora",
                 statsDesc: "concluído para o quarto e fundo da nossa filha!",
                 feedTitle: "📢 Classificação Atual ao Vivo",
-                alertPrefix: "Obrigado! O seu palpite foi registado no painel. A abrir o Revolut para concluir a doação...",
+                emptyFeed: "Ainda não há palpites. Seja o primeiro!",
+                alertPrefix: "Obrigado! O seu palpite foi guardado no painel. A abrir o Revolut para concluir a doação...",
                 placeholderFname: "Joana",
                 placeholderLname: "Silva",
                 currencySign: "€"
@@ -229,7 +233,6 @@
             currentLang = lang;
             const dict = translations[lang];
 
-            // Render text inputs strings
             document.getElementById('badge-text').innerText = dict.badge;
             document.getElementById('main-title').innerText = dict.title;
             document.getElementById('main-desc').innerText = dict.desc;
@@ -247,20 +250,16 @@
             document.getElementById('stats-title').innerText = dict.statsTitle;
             document.getElementById('feed-title').innerText = dict.feedTitle;
             
-            // Format dynamic fields
             document.getElementById('customDonation').placeholder = dict.customAmount;
             document.getElementById('input-fname').placeholder = dict.placeholderFname;
             document.getElementById('input-lname').placeholder = dict.placeholderLname;
 
-            updateVisualCounters();
-
-            // Clear visual modal restrictions
             document.getElementById('languageModal').classList.add('hidden');
             document.body.classList.remove('modal-active');
-            
-            // Fade-in dashboard
-            const mainContent = document.getElementById('mainContent');
-            mainContent.classList.remove('opacity-0');
+            document.getElementById('mainContent').classList.remove('opacity-0');
+
+            // Fetch live entries from Google Sheet
+            fetchLiveGuesses();
         }
 
         function setDonation(amount) {
@@ -269,61 +268,93 @@
 
         function updateVisualCounters() {
             const dict = translations[currentLang];
-            // Format total money element strings
             document.getElementById('stats-total').innerText = dict.currencySign + totalDonatedPool.toFixed(2);
             
-            // Calculate progress bar logic
             let progressPercentage = (totalDonatedPool / targetGoal) * 100;
             if (progressPercentage > 100) progressPercentage = 100;
             document.getElementById('progress-bar').style.width = progressPercentage + '%';
-            
             document.getElementById('stats-desc').innerText = Math.round(progressPercentage) + "% " + dict.statsDesc;
         }
 
-        function handleFormSubmit(e) {
+        // Fetch live entries directly from your Google Sheet via SheetDB
+        async function fetchLiveGuesses() {
+            try {
+                const response = await fetch(SHEETDB_URL);
+                const data = await response.json();
+                
+                const feed = document.getElementById('feed');
+                feed.innerHTML = '';
+                totalDonatedPool = 0;
+
+                if (Array.isArray(data) && data.length > 0) {
+                    document.getElementById('feed-empty-msg').classList.add('hidden');
+                    
+                    // Render entries starting from newest
+                    [...data].reverse().forEach(entry => {
+                        const amount = parseFloat(entry.donationValue) || 0;
+                        totalDonatedPool += amount;
+
+                        const formattedDate = new Date(entry.guessedDate).toLocaleDateString(currentLang === 'en' ? 'en-US' : 'hr-HR', { month: 'short', day: 'numeric' });
+
+                        const feedItem = `
+                            <div class="py-3 flex justify-between items-center">
+                                <div class="text-sm">
+                                    <strong>${entry.firstName} ${entry.lastName}</strong>
+                                    <p class="text-xs text-slate-500">${translations[currentLang].date}: ${formattedDate} @ ${entry.guessedTime}</p>
+                                </div>
+                                <span class="bg-pink-50 text-pink-600 text-xs px-2 py-1 rounded font-bold">${translations[currentLang].donation}: ${translations[currentLang].currencySign}${amount}</span>
+                            </div>
+                        `;
+                        feed.insertAdjacentHTML('beforeend', feedItem);
+                    });
+                } else {
+                    document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
+                }
+                updateVisualCounters();
+            } catch (err) {
+                console.error("Error loading live guesses:", err);
+                document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
+            }
+        }
+
+        // Save a new guess directly to Google Sheet
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const dict = translations[currentLang];
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
 
-            // Capture submitted values dynamically
-            const firstName = document.getElementById('input-fname').value;
-            const lastName = document.getElementById('input-lname').value;
-            const guessedDate = document.getElementById('input-date').value;
-            const guessedTime = document.getElementById('input-time').value;
-            const donationValue = parseFloat(document.getElementById('customDonation').value) || 0;
+            const newGuess = {
+                firstName: document.getElementById('input-fname').value,
+                lastName: document.getElementById('input-lname').value,
+                guessedDate: document.getElementById('input-date').value,
+                guessedTime: document.getElementById('input-time').value,
+                donationValue: parseFloat(document.getElementById('customDonation').value) || 0
+            };
 
-            // Increment totals live on browser screen
-            totalDonatedPool += donationValue;
-            updateVisualCounters();
+            // Post to Google Sheet via SheetDB
+            try {
+                await fetch(SHEETDB_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: [newGuess] })
+                });
+            } catch (err) {
+                console.error("Could not save to Google Sheet:", err);
+            }
 
-            // Hide empty feed notification flag
-            document.getElementById('feed-empty-msg').classList.add('hidden');
+            // Refresh leaderboard
+            await fetchLiveGuesses();
 
-            // Format date string for display
-            const formattedDate = new Date(guessedDate).toLocaleDateString(currentLang === 'en' ? 'en-US' : 'hr-HR', { month: 'short', day: 'numeric' });
-
-            // Generate dynamic new addition item
-            const newFeedItem = `
-                <div class="py-3 flex justify-between items-center animate-fade-in">
-                    <div class="text-sm">
-                        <strong>${firstName} ${lastName}</strong>
-                        <p class="text-xs text-slate-500">${dict.date}: ${formattedDate} @ ${guessedTime}</p>
-                    </div>
-                    <span class="bg-pink-50 text-pink-600 text-xs px-2 py-1 rounded font-bold">${dict.donation}: ${dict.currencySign}${donationValue}</span>
-                </div>
-            `;
-
-            // Append item element live to user standings list
-            document.getElementById('feed').insertAdjacentHTML('afterbegin', newFeedItem);
-
-            // Pop alert confirmation
             alert(dict.alertPrefix);
 
-            // Redirect directly to Revolut donation page
+            // Open Revolut donation link
             window.open(REAL_PAYMENT_URL, '_blank');
 
-            // Clear entry form
+            // Reset form
             document.getElementById('babyPoolForm').reset();
-            setDonation(10); // reset default donation
+            setDonation(10);
+            submitBtn.disabled = false;
         }
     </script>
 </body>
