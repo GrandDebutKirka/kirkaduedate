@@ -47,7 +47,12 @@
             <span id="badge-text" class="inline-block bg-pink-100 text-pink-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3"></span>
             <h1 id="main-title" class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2"></h1>
             <p id="main-desc" class="text-lg text-slate-600 max-w-xl mx-auto"></p>
-            <div class="mt-4 bg-emerald-50 text-emerald-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-200 text-sm font-medium">
+            
+            <!-- Prize Showcase Badge -->
+            <div id="prize-badge" class="mt-4 bg-amber-50 text-amber-900 max-w-xl mx-auto p-3 rounded-xl border border-amber-200 text-sm font-medium shadow-sm">
+            </div>
+
+            <div class="mt-3 bg-emerald-50 text-emerald-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-200 text-sm font-medium">
                 <span id="fee-notice"></span>
             </div>
         </header>
@@ -101,28 +106,15 @@
                         <input type="number" id="customDonation" min="1" value="10" class="w-full border border-slate-200 rounded-lg p-2 bg-white focus:outline-pink-400 text-sm">
                     </div>
 
-                    <!-- Express Checkout Integrations (Apple Pay & Google Pay) -->
+                    <!-- Single Direct Donation Action -->
                     <div class="pt-2 space-y-3">
-                        <label id="lbl-paymethod" class="block text-xs font-bold uppercase tracking-wide text-slate-500 text-center mb-1">— Express Checkouts —</label>
+                        <p id="lbl-revolut-info" class="text-xs text-slate-500 text-center"></p>
                         
-                        <!-- Apple Pay Button -->
-                        <button type="submit" onclick="setPayMethod('Apple Pay')" class="w-full bg-black text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-zinc-900 transition shadow-sm cursor-pointer">
-                            <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.7-1.13 1.84-.99 2.94 1.07.08 2.16-.52 2.82-1.33z"/>
-                            </svg>
-                            <span>Pay with Apple Pay</span>
+                        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md cursor-pointer text-base">
+                            <span>🔒</span>
+                            <span id="btn-submit-text">Donate & Submit Guess</span>
                         </button>
-
-                        <!-- Google Pay Button -->
-                        <button type="submit" onclick="setPayMethod('Google Pay')" class="w-full bg-white text-slate-900 font-medium py-3 px-4 rounded-xl border border-slate-300 flex items-center justify-center gap-2 hover:bg-slate-50 transition shadow-sm cursor-pointer">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                            </svg>
-                            <span>Pay with Google Pay</span>
-                        </button>
+                        <p class="text-xs text-slate-400 text-center">Supports Apple Pay, Google Pay & Cards via Revolut</p>
                     </div>
                 </form>
             </section>
@@ -149,8 +141,8 @@
 
     <!-- Complete Translation & View Logic -->
     <script>
-        // OPTIONAL: Place your real Stripe/PayPal payment link here whenever you're ready
-        const REAL_PAYMENT_URL = ""; 
+        // Your official Revolut link
+        const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
         // Dynamic State Tracker variables starting at 0
         let totalDonatedPool = 0;
@@ -160,31 +152,33 @@
             en: {
                 badge: "Coming Soon!",
                 title: "The Great Baby Guessing Pool 👶🏼✨",
-                desc: "Guess when our little daughter will make her grand debut! The first 3 people to guess closest win an awesome prize! 🥇 1st Prize: A bottle of 12-Year-Old Irish Whiskey! 🥃",
-                fee: "🎟️ Donation Entry: Submit a donation to lock in your live guess!",
-                formHeading: "Place Your Guess & Donation",
+                desc: "Guess when our little daughter will make her grand debut! The top 3 closest guesses win awesome prizes!",
+                prizesHtml: "🎁 <strong>Awesome Prizes to Win:</strong><br>🥇 1st: 12-Year-Old Irish Whiskey 🥃<br>🥈 2nd: Gift Hamper with Portuguese Products 🇵🇹<br>🥉 3rd: Gift Hamper with Croatian Products 🇭🇷",
+                fee: "🎟️ Donation Entry: A donation via Revolut is required to submit your guess!",
+                formHeading: "Place Your Guess & Donate",
                 fname: "First Name",
                 lname: "Last Name",
                 email: "Email Address",
                 date: "Guessed Birth Date",
                 time: "Guessed Time (Tie Breaker)",
                 donation: "Donation Amount",
-                customAmount: "Amount ($)",
-                methodSeparator: "— Express Checkout Donation —",
+                customAmount: "Amount (€)",
+                revolutInfo: "Clicking submit will log your guess and open your Revolut payment link to complete your donation.",
+                btnSubmit: "Donate & Submit Guess",
                 statsTitle: "📊 Total Donations So Far",
                 statsDesc: "raised towards our daughter's nursery and baby fund!",
                 feedTitle: "📢 Live Leaderboard Standings",
-                alertPrefix: "Thank you for your donation via ",
-                alertSuffix: "! Your live guess has been recorded successfully on the dashboard.",
+                alertPrefix: "Thank you! Your guess has been recorded on the live board. Opening Revolut now to complete your donation...",
                 placeholderFname: "Jane",
                 placeholderLname: "Doe",
-                currencySign: "$"
+                currencySign: "€"
             },
             hr: {
                 badge: "Stiže uskoro!",
                 title: "Velika igra pogađanja termina bebice 👶🏼✨",
-                desc: "Pogodite kada će naša mala kćer doći na svijet! Prve 3 osobe osvajaju super nagradu! 🥇 1. Nagrada: Boca 12 godina starog irskog viskija! 🥃",
-                fee: "🎟️ Kotizacija: Donacija za potvrdu vašeg glasa!",
+                desc: "Pogodite kada će naša mala kćer doći na svijet! Prve 3 osobe koje budu najbliže osvajaju fantastične nagrade!",
+                prizesHtml: "🎁 <strong>Super nagrade za pobjednike:</strong><br>🥇 1. Nagrada: Boca 12 godina starog irskog viskija 🥃<br>🥈 2. Nagrada: Poklon paket portugalskih proizvoda 🇵🇹<br>🥉 3. Nagrada: Poklon paket hrvatskih proizvoda 🇭🇷",
+                fee: "🎟️ Kotizacija: Za potvrdu prognoze potrebna je donacija putem Revoluta!",
                 formHeading: "Pošalji prognozu i donaciju",
                 fname: "Ime",
                 lname: "Prezime",
@@ -193,12 +187,12 @@
                 time: "Procijenjeno vrijeme (Za izjednačene)",
                 donation: "Iznos donacije",
                 customAmount: "Iznos (€)",
-                methodSeparator: "— Brzo plaćanje donacije —",
+                revolutInfo: "Klikom na gumb vaša se prognoza bilježi i otvara se Revolut za dovršetak donacije.",
+                btnSubmit: "Doniraj i pošalji prognozu",
                 statsTitle: "📊 Ukupno prikupljene donacije",
                 statsDesc: "prikupljeno za dječju sobicu i potrepštine za našu kćer!",
                 feedTitle: "📢 Trenutni poredak uživo",
-                alertPrefix: "Hvala vam na donaciji putem usluge ",
-                alertSuffix: "! Vaša prognoza je uspješno unesena i zabilježena.",
+                alertPrefix: "Hvala vam! Vaša prognoza je zabilježena. Otvaramo Revolut za dovršetak donacije...",
                 placeholderFname: "Iva",
                 placeholderLname: "Horvat",
                 currencySign: "€"
@@ -206,8 +200,9 @@
             pt: {
                 badge: "Brevemente!",
                 title: "A Grande Aposta do Bebé 👶🏼✨",
-                desc: "Tente adivinhar quando a nossa filhinha vai nascer! As primeiras 3 pessoas ganham um prémio fantástico! 🥇 1.º Prémio: Uma garrafa de Uísque Irlandês 12 Anos! 🥃",
-                fee: "🎟️ Inscrição: Uma doação para validar o seu palpite!",
+                desc: "Tente adivinhar quando a nossa filhinha vai nascer! Os 3 palpites mais próximos ganham prémios incríveis!",
+                prizesHtml: "🎁 <strong>Prémios Fantásticos:</strong><br>🥇 1.º Prémio: Uísque Irlandês 12 Anos 🥃<br>🥈 2.º Prémio: Cabaz de Produtos Portugueses 🇵🇹<br>🥉 3.º Prémio: Cabaz de Produtos Croatas 🇭🇷",
+                fee: "🎟️ Inscrição: É necessária uma doação via Revolut para validar o seu palpite!",
                 formHeading: "Deixe o seu Palpite e Doação",
                 fname: "Primeiro Nome",
                 lname: "Apelido",
@@ -216,12 +211,12 @@
                 time: "Hora (Desempate)",
                 donation: "Valor da Doação",
                 customAmount: "Valor (€)",
-                methodSeparator: "— Doação por Pagamento Expresso —",
+                revolutInfo: "Ao clicar em enviar, o seu palpite será registado e será aberto o Revolut para concluir a doação.",
+                btnSubmit: "Doar e Enviar Palpite",
                 statsTitle: "📊 Total de Doações até Agora",
                 statsDesc: "concluído para o quarto e fundo da nossa filha!",
                 feedTitle: "📢 Classificação Atual ao Vivo",
-                alertPrefix: "Obrigado pela sua doação via ",
-                alertSuffix: "! O seu palpite foi registado com sucesso no painel.",
+                alertPrefix: "Obrigado! O seu palpite foi registado no painel. A abrir o Revolut para concluir a doação...",
                 placeholderFname: "Joana",
                 placeholderLname: "Silva",
                 currencySign: "€"
@@ -229,7 +224,6 @@
         };
 
         let currentLang = 'en';
-        let chosenPaymentMethod = 'Apple Pay';
 
         function selectLanguage(lang) {
             currentLang = lang;
@@ -239,6 +233,7 @@
             document.getElementById('badge-text').innerText = dict.badge;
             document.getElementById('main-title').innerText = dict.title;
             document.getElementById('main-desc').innerText = dict.desc;
+            document.getElementById('prize-badge').innerHTML = dict.prizesHtml;
             document.getElementById('fee-notice').innerText = dict.fee;
             document.getElementById('form-heading').innerText = dict.formHeading;
             document.getElementById('lbl-fname').innerText = dict.fname;
@@ -247,7 +242,8 @@
             document.getElementById('lbl-date').innerText = dict.date;
             document.getElementById('lbl-time').innerText = dict.time;
             document.getElementById('lbl-donation').innerText = dict.donation;
-            document.getElementById('lbl-paymethod').innerText = dict.methodSeparator;
+            document.getElementById('lbl-revolut-info').innerText = dict.revolutInfo;
+            document.getElementById('btn-submit-text').innerText = dict.btnSubmit;
             document.getElementById('stats-title').innerText = dict.statsTitle;
             document.getElementById('feed-title').innerText = dict.feedTitle;
             
@@ -269,10 +265,6 @@
 
         function setDonation(amount) {
             document.getElementById('customDonation').value = amount;
-        }
-
-        function setPayMethod(method) {
-            chosenPaymentMethod = method;
         }
 
         function updateVisualCounters() {
@@ -324,12 +316,10 @@
             document.getElementById('feed').insertAdjacentHTML('afterbegin', newFeedItem);
 
             // Pop alert confirmation
-            alert(dict.alertPrefix + chosenPaymentMethod + dict.alertSuffix);
+            alert(dict.alertPrefix);
 
-            // Redirect if real payment URL is configured
-            if (REAL_PAYMENT_URL !== "") {
-                window.open(REAL_PAYMENT_URL, '_blank');
-            }
+            // Redirect directly to Revolut donation page
+            window.open(REAL_PAYMENT_URL, '_blank');
 
             // Clear entry form
             document.getElementById('babyPoolForm').reset();
