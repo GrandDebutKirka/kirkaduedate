@@ -40,7 +40,7 @@
             
             <div class="space-y-3">
                 <button onclick="selectLanguage('en')" class="w-full py-3.5 px-5 bg-slate-50 hover:bg-pink-500 hover:text-white border border-slate-200/80 hover:border-pink-500 rounded-2xl font-bold text-slate-700 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
-                    <span class="flex items-center gap-3"><span class="text-xl">🇺🇸</span> English</span>
+                    <span class="flex items-center gap-3"><span class="text-xl">🇮🇪</span> English</span>
                     <span class="text-slate-400 group-hover:text-white transition">➔</span>
                 </button>
                 <button onclick="selectLanguage('hr')" class="w-full py-3.5 px-5 bg-slate-50 hover:bg-pink-500 hover:text-white border border-slate-200/80 hover:border-pink-500 rounded-2xl font-bold text-slate-700 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
@@ -235,8 +235,8 @@
                 emptyFeed: "No confirmed guesses yet. Be the first!",
                 modalTitle: "Guess Received! 🎀",
                 modalDesc: "Please complete your payment on the opened Revolut tab. Your guess will appear on the live leaderboard as soon as payment is confirmed!",
-                placeholderFname: "Jane",
-                placeholderLname: "Doe",
+                placeholderFname: "Troy",
+                placeholderLname: "Parrot",
                 currencySign: "€"
             },
             hr: {
@@ -257,13 +257,13 @@
                 emptyFeed: "Još nema potvrđenih prognoza. Budi prvi!",
                 modalTitle: "Prognoza Zaprimljena! 🎀",
                 modalDesc: "Molimo dovršite uplatu na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim uplata bude potvrđena!",
-                placeholderFname: "Iva",
-                placeholderLname: "Horvat",
+                placeholderFname: "Luka",
+                placeholderLname: "Modric",
                 currencySign: "€"
             },
             pt: {
                 badge: "Jogo do Bebé",
-                title: "Aposta do Nascimento 👶🏼✨",
+                title: "Aposta na data de Nascimento 👶🏼✨",
                 desc: "Adivinhe quando vai nascer a nossa filhinha! Os 3 palpites mais próximos ganham prêmios!",
                 prizesHtml: "<div class='font-bold text-amber-900 mb-1 flex items-center gap-1.5'>🎁 <span>Prémios:</span></div><ul class='space-y-1 text-xs text-slate-600 font-medium'><li>🥇 <strong>1.º Lugar:</strong> Uísque Irlandês 12 Anos 🥃</li><li>🥈 <strong>2.º Lugar:</strong> Cabaz de Produtos Portugueses 🇵🇹</li><li>🥉 <strong>3.º Lugar:</strong> Cabaz de Produtos Croatas 🇭🇷</li></ul>",
                 formHeading: "Deixar Palpite",
@@ -279,8 +279,8 @@
                 emptyFeed: "Ainda não há palpites confirmados. Seja o primeiro!",
                 modalTitle: "Palpite Recebido! 🎀",
                 modalDesc: "Por favor conclua o pagamento no separador do Revolut. O seu palpite aparecerá no painel assim que a doação for confirmada!",
-                placeholderFname: "Joana",
-                placeholderLname: "Silva",
+                placeholderFname: "Eder",
+                placeholderLname: "Lopes",
                 currencySign: "€"
             }
         };
@@ -354,6 +354,13 @@
                 totalDonatedPool = 0;
                 confirmedGuessesCount = 0;
 
+                // Explicit mapping for date formatting locales
+                const localeMap = {
+                    en: 'en-US',
+                    hr: 'hr-HR',
+                    pt: 'pt-PT'
+                };
+
                 if (Array.isArray(data) && data.length > 0) {
                     // Filter ONLY Paid rows
                     const paidEntries = data.filter(entry => entry.status && entry.status.toLowerCase() === 'paid');
@@ -366,7 +373,8 @@
                             totalDonatedPool += amount;
                             confirmedGuessesCount++;
 
-                            const formattedDate = new Date(entry.guessedDate).toLocaleDateString(currentLang === 'en' ? 'en-US' : 'hr-HR', { month: 'short', day: 'numeric' });
+                            // Correct locale mapping per language
+                            const formattedDate = new Date(entry.guessedDate).toLocaleDateString(localeMap[currentLang] || 'en-US', { month: 'short', day: 'numeric' });
                             const initials = (entry.firstName[0] || '') + (entry.lastName[0] || '');
 
                             const feedItem = `
