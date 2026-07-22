@@ -1,1 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Girl Due Date Pool / Kladionica za termin bebice / Sorteio do Bebé</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 50%, #fae8ff 100%);
+        }
+        /* Lock scrolling while language modal is open */
+        .modal-active {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-slate-800 font-sans antialiased modal-active">
 
+    <!-- LANGUAGE SELECTOR OVERLAY -->
+    <div id="languageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center shadow-2xl border border-slate-100 transform scale-100 transition-all">
+            <span class="text-4xl mb-2 inline-block">🌍</span>
+            <h2 class="text-2xl font-black text-slate-900 mb-2">Choose Your Language</h2>
+            <p class="text-sm text-slate-500 mb-6">Odaberite jezik / Escolha o seu idioma</p>
+            
+            <div class="space-y-3">
+                <button onclick="selectLanguage('en')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
+                    <span>🇺🇸 English</span> <span class="text-xs text-slate-400">➔</span>
+                </button>
+                <button onclick="selectLanguage('hr')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
+                    <span>🇭🇷 Hrvatski</span> <span class="text-xs text-slate-400">➔</span>
+                </button>
+                <button onclick="selectLanguage('pt')" class="w-full py-3 px-4 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-xl font-semibold text-slate-800 transition text-left flex items-center justify-between">
+                    <span>🇵🇹 Português (PT)</span> <span class="text-xs text-slate-400">➔</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Website Framework -->
+    <div id="mainContent" class="opacity-0 transition-opacity duration-300">
+        
+        <!-- Header Section -->
+        <header class="max-w-4xl mx-auto pt-12 pb-6 px-4 text-center">
+            <span id="badge-text" class="inline-block bg-pink-100 text-pink-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3"></span>
+            <h1 id="main-title" class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2"></h1>
+            <p id="main-desc" class="text-lg text-slate-600 max-w-xl mx-auto"></p>
+            <div class="mt-4 bg-emerald-50 text-emerald-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-200 text-sm font-medium">
+                <span id="fee-notice"></span>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-2 gap-8 items-start">
+            
+            <!-- Left Column: The Form -->
+            <section class="bg-white rounded-2xl shadow-xl shadow-pink-100/40 p-6 md:p-8 border border-slate-100">
+                <h2 id="form-heading" class="text-2xl font-bold text-slate-900 mb-6"></h2>
+                
+                <form id="babyPoolForm" class="space-y-5" onsubmit="handleFormSubmit(event)">
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="lbl-fname" class="block text-xs font-bold uppercase tracking-wide text-slate-600 mb-1"></label>
+                            <input type="text" id="input-fname" required class="w-full border border-slate-200 rounded-lg p-2.5 focus:outline-pink-400">
+                        </div>
+                        <div>
+                            <label id="lbl-lname" class="block text-xs font-bold uppercase tracking-wide text-slate-600 mb-1"></label>
+                            <input type="text" id="input-lname" required class="w-full border border-slate-200 rounded-lg p-2.5 focus:outline-pink-400">
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label id="lbl-email" class="block text-xs font-bold uppercase tracking-wide text-slate-600 mb-1"></label>
+                        <input type="email" id="input-email" required class="w-full border border-slate-200 rounded-lg p-2.5 focus:outline-pink-400">
+                    </div>
+
+                    <!-- Date & Time Inputs -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="lbl-date" class="block text-xs font-bold uppercase tracking-wide text-slate-600 mb-1"></label>
+                            <input type="date" id="input-date" required class="w-full border border-slate-200 rounded-lg p-2.5 focus:outline-pink-400">
+                        </div>
+                        <div>
+                            <label id="lbl-time" class="block text-xs font-bold uppercase tracking-wide text-slate-600 mb-1"></label>
+                            <input type="time" id="input-time" required class="w-full border border-slate-200 rounded-lg p-2.5 focus:outline-pink-400">
+                        </div>
+                    </div>
+
+                    <!-- Donation Panel -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <label id="lbl-donation" class="block text-xs font-bold uppercase tracking-wide text-slate-700 mb-2"></label>
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            <button type="button" onclick="setDonation(5)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">5</button>
+                            <button type="button" onclick="setDonation(10)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">10</button>
+                            <button type="button" onclick="setDonation(20)" class="py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:border-pink-400 text-slate-700 focus:bg-pink-500 focus:text-white">20</button>
+                        </div>
+                        <input type="number" id="customDonation" min="1" value="10" class="w-full border border-slate-200 rounded-lg p-2 bg-white focus:outline-pink-400 text-sm">
+                    </div>
+
+                    <!-- Express Checkout Integrations (Apple Pay & Google Pay) -->
+                    <div class="pt-2 space-y-3">
+                        <label id="lbl-paymethod" class="block text-xs font-bold uppercase tracking-wide text-slate-500 text-center mb-1">— Express Checkouts —</label>
+                        
+                        <!-- Apple Pay Button -->
+                        <button type="submit" onclick="setPayMethod('Apple Pay')" class="w-full bg-black text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-zinc-900 transition shadow-sm cursor-pointer">
+                            <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.7-1.13 1.84-.99 2.94 1.07.08 2.16-.52 2.82-1.33z"/>
+                            </svg>
+                            <span>Pay with Apple Pay</span>
+                        </button>
+
+                        <!-- Google Pay Button -->
+                        <button type="submit" onclick="setPayMethod('Google Pay')" class="w-full bg-white text-slate-900 font-medium py-3 px-4 rounded-xl border border-slate-300 flex items-center justify-center gap-2 hover:bg-slate-50 transition shadow-sm cursor-pointer">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                            <span>Pay with Google Pay</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Column: Goal Tracker & Active Standings -->
+            <section class="space-y-6">
+                <div class="bg-white rounded-2xl shadow-xl shadow-pink-100/40 p-6 border border-slate-100">
+                    <h2 id="stats-title" class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"></h2>
+                    <div id="stats-total" class="text-3xl font-black text-pink-600">$0.00</div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 mt-2">
+                        <div id="progress-bar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p id="stats-desc" class="text-xs text-slate-500 mt-2"></p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl shadow-pink-100/40 p-6 border border-slate-100">
+                    <h2 id="feed-title" class="text-xl font-bold text-slate-900 mb-4"></h2>
+                    <div id="feed-empty-msg" class="text-sm text-slate-400 italic py-4 text-center">No donations or guesses placed yet. Be the first!</div>
+                    <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto" id="feed"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Complete Translation & View Logic -->
+    <script>
+        // OPTIONAL: Place your real Stripe/PayPal payment link here whenever you're ready
+        const REAL_PAYMENT_URL = ""; 
+
+        // Dynamic State Tracker variables starting at 0
+        let totalDonatedPool = 0;
+        const targetGoal = 500; // Target goal amount
+
+        const translations = {
+            en: {
+                badge: "Coming Soon!",
+                title: "The Great Baby Guessing Pool 👶🏼✨",
+                desc: "Guess when our little daughter will make her grand debut! The first 3 people to guess closest win an awesome prize! 🥇 1st Prize: A bottle of 12-Year-Old Irish Whiskey! 🥃",
+                fee: "🎟️ Donation Entry: Submit a donation to lock in your live guess!",
+                formHeading: "Place Your Guess & Donation",
+                fname: "First Name",
+                lname: "Last Name",
+                email: "Email Address",
+                date: "Guessed Birth Date",
+                time: "Guessed Time (Tie Breaker)",
+                donation: "Donation Amount",
+                customAmount: "Amount ($)",
+                methodSeparator: "— Express Checkout Donation —",
+                statsTitle: "📊 Total Donations So Far",
+                statsDesc: "raised towards our daughter's nursery and baby fund!",
+                feedTitle: "📢 Live Leaderboard Standings",
+                alertPrefix: "Thank you for your donation via ",
+                alertSuffix: "! Your live guess has been recorded successfully on the dashboard.",
+                placeholderFname: "Jane",
+                placeholderLname: "Doe",
+                currencySign: "$"
+            },
+            hr: {
+                badge: "Stiže uskoro!",
+                title: "Velika igra pogađanja termina bebice 👶🏼✨",
+                desc: "Pogodite kada će naša mala kćer doći na svijet! Prve 3 osobe osvajaju super nagradu! 🥇 1. Nagrada: Boca 12 godina starog irskog viskija! 🥃",
+                fee: "🎟️ Kotizacija: Donacija za potvrdu vašeg glasa!",
+                formHeading: "Pošalji prognozu i donaciju",
+                fname: "Ime",
+                lname: "Prezime",
+                email: "E-mail adresa",
+                date: "Procijenjeni datum rođenja",
+                time: "Procijenjeno vrijeme (Za izjednačene)",
+                donation: "Iznos donacije",
+                customAmount: "Iznos (€)",
+                methodSeparator: "— Brzo plaćanje donacije —",
+                statsTitle: "📊 Ukupno prikupljene donacije",
+                statsDesc: "prikupljeno za dječju sobicu i potrepštine za našu kćer!",
+                feedTitle: "📢 Trenutni poredak uživo",
+                alertPrefix: "Hvala vam na donaciji putem usluge ",
+                alertSuffix: "! Vaša prognoza je uspješno unesena i zabilježena.",
+                placeholderFname: "Iva",
+                placeholderLname: "Horvat",
+                currencySign: "€"
+            },
+            pt: {
+                badge: "Brevemente!",
+                title: "A Grande Aposta do Bebé 👶🏼✨",
+                desc: "Tente adivinhar quando a nossa filhinha vai nascer! As primeiras 3 pessoas ganham um prémio fantástico! 🥇 1.º Prémio: Uma garrafa de Uísque Irlandês 12 Anos! 🥃",
+                fee: "🎟️ Inscrição: Uma doação para validar o seu palpite!",
+                formHeading: "Deixe o seu Palpite e Doação",
+                fname: "Primeiro Nome",
+                lname: "Apelido",
+                email: "Endereço de E-mail",
+                date: "Data de Nascimento",
+                time: "Hora (Desempate)",
+                donation: "Valor da Doação",
+                customAmount: "Valor (€)",
+                methodSeparator: "— Doação por Pagamento Expresso —",
+                statsTitle: "📊 Total de Doações até Agora",
+                statsDesc: "concluído para o quarto e fundo da nossa filha!",
+                feedTitle: "📢 Classificação Atual ao Vivo",
+                alertPrefix: "Obrigado pela sua doação via ",
+                alertSuffix: "! O seu palpite foi registado com sucesso no painel.",
+                placeholderFname: "Joana",
+                placeholderLname: "Silva",
+                currencySign: "€"
+            }
+        };
+
+        let currentLang = 'en';
+        let chosenPaymentMethod = 'Apple Pay';
+
+        function selectLanguage(lang) {
+            currentLang = lang;
+            const dict = translations[lang];
+
+            // Render text inputs strings
+            document.getElementById('badge-text').innerText = dict.badge;
+            document.getElementById('main-title').innerText = dict.title;
+            document.getElementById('main-desc').innerText = dict.desc;
+            document.getElementById('fee-notice').innerText = dict.fee;
+            document.getElementById('form-heading').innerText = dict.formHeading;
+            document.getElementById('lbl-fname').innerText = dict.fname;
+            document.getElementById('lbl-lname').innerText = dict.lname;
+            document.getElementById('lbl-email').innerText = dict.email;
+            document.getElementById('lbl-date').innerText = dict.date;
+            document.getElementById('lbl-time').innerText = dict.time;
+            document.getElementById('lbl-donation').innerText = dict.donation;
+            document.getElementById('lbl-paymethod').innerText = dict.methodSeparator;
+            document.getElementById('stats-title').innerText = dict.statsTitle;
+            document.getElementById('feed-title').innerText = dict.feedTitle;
+            
+            // Format dynamic fields
+            document.getElementById('customDonation').placeholder = dict.customAmount;
+            document.getElementById('input-fname').placeholder = dict.placeholderFname;
+            document.getElementById('input-lname').placeholder = dict.placeholderLname;
+
+            updateVisualCounters();
+
+            // Clear visual modal restrictions
+            document.getElementById('languageModal').classList.add('hidden');
+            document.body.classList.remove('modal-active');
+            
+            // Fade-in dashboard
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.remove('opacity-0');
+        }
+
+        function setDonation(amount) {
+            document.getElementById('customDonation').value = amount;
+        }
+
+        function setPayMethod(method) {
+            chosenPaymentMethod = method;
+        }
+
+        function updateVisualCounters() {
+            const dict = translations[currentLang];
+            // Format total money element strings
+            document.getElementById('stats-total').innerText = dict.currencySign + totalDonatedPool.toFixed(2);
+            
+            // Calculate progress bar logic
+            let progressPercentage = (totalDonatedPool / targetGoal) * 100;
+            if (progressPercentage > 100) progressPercentage = 100;
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            
+            document.getElementById('stats-desc').innerText = Math.round(progressPercentage) + "% " + dict.statsDesc;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const dict = translations[currentLang];
+
+            // Capture submitted values dynamically
+            const firstName = document.getElementById('input-fname').value;
+            const lastName = document.getElementById('input-lname').value;
+            const guessedDate = document.getElementById('input-date').value;
+            const guessedTime = document.getElementById('input-time').value;
+            const donationValue = parseFloat(document.getElementById('customDonation').value) || 0;
+
+            // Increment totals live on browser screen
+            totalDonatedPool += donationValue;
+            updateVisualCounters();
+
+            // Hide empty feed notification flag
+            document.getElementById('feed-empty-msg').classList.add('hidden');
+
+            // Format date string for display
+            const formattedDate = new Date(guessedDate).toLocaleDateString(currentLang === 'en' ? 'en-US' : 'hr-HR', { month: 'short', day: 'numeric' });
+
+            // Generate dynamic new addition item
+            const newFeedItem = `
+                <div class="py-3 flex justify-between items-center animate-fade-in">
+                    <div class="text-sm">
+                        <strong>${firstName} ${lastName}</strong>
+                        <p class="text-xs text-slate-500">${dict.date}: ${formattedDate} @ ${guessedTime}</p>
+                    </div>
+                    <span class="bg-pink-50 text-pink-600 text-xs px-2 py-1 rounded font-bold">${dict.donation}: ${dict.currencySign}${donationValue}</span>
+                </div>
+            `;
+
+            // Append item element live to user standings list
+            document.getElementById('feed').insertAdjacentHTML('afterbegin', newFeedItem);
+
+            // Pop alert confirmation
+            alert(dict.alertPrefix + chosenPaymentMethod + dict.alertSuffix);
+
+            // Redirect if real payment URL is configured
+            if (REAL_PAYMENT_URL !== "") {
+                window.open(REAL_PAYMENT_URL, '_blank');
+            }
+
+            // Clear entry form
+            document.getElementById('babyPoolForm').reset();
+            setDonation(10); // reset default donation
+        }
+    </script>
+</body>
+</html>
