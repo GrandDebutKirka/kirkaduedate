@@ -112,8 +112,8 @@
                 </div>
             </div>
 
-            <!-- Prizes Card -->
-            <div id="prize-badge" class="mt-5 glass-card rounded-2xl p-5 text-left border-amber-200/80 bg-amber-50/50 shadow-sm max-w-lg mx-auto text-sm text-slate-700"></div>
+            <!-- Prizes Card (Centered) -->
+            <div id="prize-badge" class="mt-5 glass-card rounded-2xl p-5 text-center border-amber-200/80 bg-amber-50/50 shadow-sm max-w-lg mx-auto text-sm text-slate-700"></div>
         </header>
 
         <!-- Stats Counter Bar -->
@@ -272,8 +272,8 @@
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
-        // TARGET DUE DATE
-        const dueTargetDate = new Date("2026-08-15T00:00:00").getTime();
+        // UPDATED TARGET DUE DATE: August 5th, 2026
+        const dueTargetDate = new Date("2026-08-05T00:00:00").getTime();
 
         let totalDonatedPool = 0;
         let confirmedGuessesCount = 0;
@@ -286,7 +286,7 @@
                 desc: "Guess when our baby girl will arrive! The top 3 closest guesses win awesome hampers!",
                 cdLabel: "Estimated Due Date Countdown",
                 cdDays: "Days", cdHours: "Hours", cdMins: "Mins", cdSecs: "Secs",
-                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center gap-1.5'>🎁 <span>Prizes to Win:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold'><li>🥇 <strong>1st Place:</strong> Gift Hamper with Irish Products 🇮🇪</li><li>🥈 <strong>2nd Place:</strong> Gift Hamper (Portuguese or Croatian Products) 🇵🇹 🇭🇷</li><li>🥉 <strong>3rd Place:</strong> Gift Hamper (Portuguese or Croatian Products) 🇵🇹 🇭🇷</li></ul>",
+                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center justify-center gap-1.5'>🎁 <span>Prizes to Win:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold text-center'><li>🥇 <strong>1st Place:</strong> Gift Hamper with Irish Products 🇮🇪</li><li>🥈 <strong>2nd Place:</strong> Gift Hamper (Portuguese or Croatian Products) 🇵🇹 🇭🇷</li><li>🥉 <strong>3rd Place:</strong> Gift Hamper (Portuguese or Croatian Products) 🇵🇹 🇭🇷</li></ul>",
                 formHeading: "Place Your Guess",
                 fname: "First Name",
                 lname: "Last Name",
@@ -317,7 +317,7 @@
                 desc: "Pogodite kada stiže naša djevojčica! Top 3 najbliže prognoze osvajaju nagrade!",
                 cdLabel: "Odbrojavanje do očekivanog termina",
                 cdDays: "Dana", cdHours: "Sati", cdMins: "Min", cdSecs: "Sek",
-                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center gap-1.5'>🎁 <span>Nagradni fond:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold'><li>🥇 <strong>1. mjesto:</strong> Poklon košarica irskih proizvoda 🇮🇪</li><li>🥈 <strong>2. mjesto:</strong> Poklon košarica (portugalski ili hrvatski proizvodi) 🇵🇹 🇭🇷</li><li>🥉 <strong>3. mjesto:</strong> Poklon košarica (portugalski ili hrvatski proizvodi) 🇵🇹 🇭🇷</li></ul>",
+                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center justify-center gap-1.5'>🎁 <span>Nagradni fond:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold text-center'><li>🥇 <strong>1. mjesto:</strong> Poklon košarica irskih proizvoda 🇮🇪</li><li>🥈 <strong>2. mjesto:</strong> Poklon košarica (portugalski ili hrvatski proizvodi) 🇵🇹 🇭🇷</li><li>🥉 <strong>3. mjesto:</strong> Poklon košarica (portugalski ili hrvatski proizvodi) 🇵🇹 🇭🇷</li></ul>",
                 formHeading: "Pošalji Prognozu",
                 fname: "Ime",
                 lname: "Prezime",
@@ -348,7 +348,7 @@
                 desc: "Adivinhe quando vai nascer a nossa filhinha! Os 3 palpites mais próximos ganham prêmios!",
                 cdLabel: "Contagem Regressiva para a Data Prevista",
                 cdDays: "Dias", cdHours: "Horas", cdMins: "Mins", cdSecs: "Segs",
-                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center gap-1.5'>🎁 <span>Prémios:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold'><li>🥇 <strong>1.º Lugar:</strong> Cabaz de Produtos Irlandeses 🇮🇪</li><li>🥈 <strong>2.º Lugar:</strong> Cabaz de Produtos (Portugueses ou Croatas) 🇵🇹 🇭🇷</li><li>🥉 <strong>3.º Lugar:</strong> Cabaz de Produtos (Portugueses ou Croatas) 🇵🇹 🇭🇷</li></ul>",
+                prizesHtml: "<div class='font-black text-amber-900 mb-1 flex items-center justify-center gap-1.5'>🎁 <span>Prémios:</span></div><ul class='space-y-1 text-xs text-slate-600 font-semibold text-center'><li>🥇 <strong>1.º Lugar:</strong> Cabaz de Produtos Irlandeses 🇮🇪</li><li>🥈 <strong>2.º Lugar:</strong> Cabaz de Produtos (Portugueses ou Croatas) 🇵🇹 🇭🇷</li><li>🥉 <strong>3.º Lugar:</strong> Cabaz de Produtos (Portugueses ou Croatas) 🇵🇹 🇭🇷</li></ul>",
                 formHeading: "Deixar Palpite",
                 fname: "Primeiro Nome",
                 lname: "Apelido",
