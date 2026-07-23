@@ -8,9 +8,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* Disable text selection across the page */
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(circle at top left, #fff0f5 0%, #fae8ff 40%, #f3e8ff 100%);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* Keep inputs selectable so users can type */
+        input, button, textarea {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.88);
@@ -277,6 +289,28 @@
     </div>
 
     <script>
+        // --- BASIC HTML & CODE PROTECTION SCRIPTS ---
+        // 1. Disable Right-Click Context Menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 2. Disable Common Developer Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Disable F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+            }
+            // Disable Ctrl+U (View Source) & Ctrl+S (Save Page)
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+            }
+        });
+
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
