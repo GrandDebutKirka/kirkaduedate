@@ -349,8 +349,9 @@
                 title.style.transform = 'scale(1)';
                 title.classList.add('title-glow');
 
-                const clickX = event ? event.clientX : window.innerWidth / 2;
-                const clickY = event ? event.innerHeight / 3 : window.innerHeight / 3;
+                // FIXED: Correctly grab coordinates or fallback gracefully
+                const clickX = (event && event.clientX) ? event.clientX : window.innerWidth / 2;
+                const clickY = (event && event.clientY) ? event.clientY : window.innerHeight / 3;
 
                 const particles = ['👶🏼', '🍼', '🎀', '💖', '🐣', '✨', '🧸', '🌸'];
 
