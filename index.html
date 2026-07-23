@@ -71,7 +71,7 @@
 </head>
 <body class="min-h-screen text-slate-800 antialiased pb-16 selection:bg-pink-200">
 
-    <!-- LANGUAGE SELECTOR OVERLAY (Always loads first on top of everything) -->
+    <!-- LANGUAGE SELECTOR OVERLAY (Loads first) -->
     <div id="languageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
         <div class="bg-white/95 rounded-3xl max-w-sm w-full p-8 text-center shadow-2xl border border-pink-100 animate-pop">
             <div class="w-16 h-16 bg-gradient-to-tr from-pink-100 to-rose-200 text-pink-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-md shadow-pink-100">
@@ -350,7 +350,7 @@
                 title.classList.add('title-glow');
 
                 const clickX = event ? event.clientX : window.innerWidth / 2;
-                const clickY = event ? event.clientY : window.innerHeight / 3;
+                const clickY = event ? event.innerHeight / 3 : window.innerHeight / 3;
 
                 const particles = ['👶🏼', '🍼', '🎀', '💖', '🐣', '✨', '🧸', '🌸'];
 
@@ -542,7 +542,7 @@
 
             renderFAQs(dict.faqs);
 
-            // Hide the initial language modal and reveal full application interface
+            // Hide language modal and reveal main UI
             document.getElementById('languageModal').classList.add('hidden');
             const mainEl = document.getElementById('mainContent');
             mainEl.classList.remove('opacity-0', 'pointer-events-none');
@@ -622,7 +622,7 @@
 
                 const verified = data.filter(item => item.status && item.status.toLowerCase() === 'confirmed');
 
-                totalDonatedPool = verified.reduce((acc, curr) => acc + (parseFloat(curr.donation) || 0), 0);
+                totalDonatedPool = verified.reduce((acc, curr) => acc + (parseFloat(curr.donationValue) || 0), 0);
                 confirmedGuessesCount = verified.length;
 
                 updateStats();
@@ -655,8 +655,8 @@
 
             const totals = {};
             data.forEach(item => {
-                const name = `${item.fname || ''} ${item.lname || ''}`.trim() || 'Anonymous';
-                const amt = parseFloat(item.donation) || 0;
+                const name = `${item.firstName || ''} ${item.lastName || ''}`.trim() || 'Anonymous';
+                const amt = parseFloat(item.donationValue) || 0;
                 totals[name] = (totals[name] || 0) + amt;
             });
 
@@ -702,11 +702,11 @@
                 row.className = "bg-white/90 p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between";
                 row.innerHTML = `
                     <div>
-                        <p class="font-black text-slate-800 text-sm">${item.fname || ''} ${item.lname || ''}</p>
-                        <p class="text-xs text-pink-600 font-bold mt-0.5">📅 ${item.date || ''} @ ${item.time || ''}</p>
+                        <p class="font-black text-slate-800 text-sm">${item.firstName || ''} ${item.lastName || ''}</p>
+                        <p class="text-xs text-pink-600 font-bold mt-0.5">📅 ${item.guessedDate || ''} @ ${item.guessedTime || ''}</p>
                     </div>
                     <span class="text-xs font-black bg-pink-100 text-pink-700 px-2.5 py-1 rounded-lg">
-                        €${parseFloat(item.donation || 0).toFixed(2)}
+                        €${parseFloat(item.donationValue || 0).toFixed(2)}
                     </span>
                 `;
                 feedEl.appendChild(row);
@@ -719,23 +719,33 @@
             submitBtn.disabled = true;
             submitBtn.classList.add('opacity-70');
 
-            const fname = document.getElementById('input-fname').value;
-            const lname = document.getElementById('input-lname').value;
+            const firstName = document.getElementById('input-fname').value;
+            const lastName = document.getElementById('input-lname').value;
             const email = document.getElementById('input-email').value;
-            const date = document.getElementById('input-date').value;
-            const time = document.getElementById('input-time').value;
-            const donation = document.getElementById('customDonation').value;
+            const guessedDate = document.getElementById('input-date').value;
+            const guessedTime = document.getElementById('input-time').value;
+            const donationValue = document.getElementById('customDonation').value;
 
+            // Generate current submission timestamp formatted as "YYYY-MM-DD HH:MM:SS"
+            const now = new Date();
+            const submittedAt = now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
+                String(now.getSeconds()).padStart(2, '0');
+
+            // Using key names matching your Google Sheet row 1 headers:
             const payload = {
                 data: [{
-                    fname,
-                    lname,
+                    firstName,
+                    lastName,
                     email,
-                    date,
-                    time,
-                    donation,
+                    guessedDate,
+                    guessedTime,
+                    donationValue,
                     status: 'pending',
-                    timestamp: new Date().toISOString()
+                    submittedAt
                 }]
             };
 
