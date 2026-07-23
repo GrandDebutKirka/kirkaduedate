@@ -253,8 +253,16 @@
             </section>
         </main>
 
-        <!-- Interactive FAQ Accordion Section -->
-        <section class="max-w-3xl mx-auto px-4">
+        <!-- Family Thank You & FAQ Section -->
+        <section class="max-w-3xl mx-auto px-4 space-y-6">
+            <!-- Thank You Banner -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 text-center border border-pink-200/80 bg-gradient-to-r from-pink-500/10 via-rose-400/10 to-purple-500/10 shadow-lg">
+                <span class="text-3xl">💖</span>
+                <p id="thank-you-msg" class="text-base sm:text-lg font-black text-slate-800 mt-2">Thank you for the support!</p>
+                <p id="thank-you-signature" class="text-sm font-extrabold text-pink-600 mt-1">From family Zubcic Silva 💕</p>
+            </div>
+
+            <!-- Interactive FAQ Accordion Section -->
             <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/90 shadow-xl">
                 <div class="text-center mb-6">
                     <span class="text-2xl">❓</span>
@@ -272,7 +280,7 @@
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
-        // UPDATED TARGET DUE DATE: August 5th, 2026
+        // Target Due Date: August 5th, 2026
         const dueTargetDate = new Date("2026-08-05T00:00:00").getTime();
 
         let totalDonatedPool = 0;
@@ -301,8 +309,11 @@
                 emptyFeed: "No confirmed guesses yet. Be the first!",
                 modalTitle: "Guess Received! 🎀",
                 modalDesc: "Please complete your payment on the opened Revolut tab. Your guess will appear on the live leaderboard as soon as payment is confirmed!",
+                thankYouMsg: "Thank you for the support!",
+                thankYouSig: "From family Zubcic Silva 💕",
                 faqTitle: "Frequently Asked Questions",
                 faqs: [
+                    { q: "What are these donations for?", a: "Instead of hosting a traditional in-person baby shower, we decided to create a fun, interactive game with prizes! Your generous donations directly support setting up our baby's nursery and purchasing everyday consumables." },
                     { q: "How is the winner calculated?", a: "The winner is the entry closest to the exact minute of the baby's birth!" },
                     { q: "Can I enter multiple times?", a: "Yes! You can place as many guesses as you like with different dates/times." },
                     { q: "When will the leaderboard update?", a: "Your entry appears live on the leaderboard as soon as your Revolut payment is confirmed by us." }
@@ -332,8 +343,11 @@
                 emptyFeed: "Još nema potvrđenih prognoza. Budi prvi!",
                 modalTitle: "Prognoza Zaprimljena! 🎀",
                 modalDesc: "Molimo dovršite uplatu na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim uplata bude potvrđena!",
+                thankYouMsg: "Hvala vam na podršci!",
+                thankYouSig: "Od obitelji Zubcic Silva 💕",
                 faqTitle: "Često Postavljana Pitanja",
                 faqs: [
+                    { q: "Kome su namijenjene ove donacije?", a: "Umjesto organiziranja klasičnog baby showera uživo, odlučili smo napraviti zabavnu i interaktivnu igru s nagradama! Vaše donacije izravno pomažu u opremanju sobe za našu bebicu i nabavci svih potrebnih svakodnevnih potrepština." },
                     { q: "Kako se određuje pobjednik?", a: "Pobjednik je osoba čija je prognoza najbliža točnom datumu i minuti rođenja bebice!" },
                     { q: "Mogu li poslati više prognoza?", a: "Da! Možete poslati neograničen broj prognoza s različitim datumima i vremenima." },
                     { q: "Kada se ljestvica ažurira?", a: "Vaša prognoza se pojavljuje čim potvrdimo vašu uplatu na Revolutu." }
@@ -363,8 +377,11 @@
                 emptyFeed: "Ainda não há palpites confirmados. Seja o primeiro!",
                 modalTitle: "Palpite Recebido! 🎀",
                 modalDesc: "Por favor conclua o pagamento no separador do Revolut. O seu palpite aparecerá no painel assim que a doação for confirmada!",
+                thankYouMsg: "Obrigado pelo vosso apoio!",
+                thankYouSig: "Da família Zubcic Silva 💕",
                 faqTitle: "Perguntas Frequentes",
                 faqs: [
+                    { q: "Para que servem estas doações?", a: "Em vez de organizarmos um baby shower presencial tradicional, decidimos criar um jogo divertido e interativo com prêmios! As vossas doações ajudam diretamente na montagem do quarto do nosso bebé e na compra de todos os consumíveis necessários." },
                     { q: "Como é escolhido o vencedor?", a: "O vencedor é aquele que acertar mais perto da data e hora exatas do nascimento do bebé!" },
                     { q: "Posso participar mais do que uma vez?", a: "Sim! Pode enviar quantos palpites desejar com datas e horas diferentes." },
                     { q: "Quando é atualizada a tabela?", a: "O seu palpite fica visível na classificação assim que confirmarmos o pagamento via Revolut." }
@@ -404,6 +421,8 @@
             document.getElementById('top-donators-title').innerText = dict.topDonatorsTitle;
             document.getElementById('modal-success-title').innerText = dict.modalTitle;
             document.getElementById('modal-success-desc').innerText = dict.modalDesc;
+            document.getElementById('thank-you-msg').innerText = dict.thankYouMsg;
+            document.getElementById('thank-you-signature').innerText = dict.thankYouSig;
             document.getElementById('faq-title').innerText = dict.faqTitle;
             
             document.getElementById('input-fname').placeholder = dict.placeholderFname;
@@ -527,7 +546,7 @@
                     if (paidEntries.length > 0) {
                         document.getElementById('feed-empty-msg').classList.add('hidden');
                         
-                        // Calculate Top Donators (aggregate donations per person)
+                        // Calculate Top Donators
                         const donatorsMap = {};
                         paidEntries.forEach(entry => {
                             const fullName = `${entry.firstName.trim()} ${entry.lastName.trim()}`;
