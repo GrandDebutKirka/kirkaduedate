@@ -3,237 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Due Date Pool</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Baby Girl Due Date Pool | Kladionica za termin bebice | Sorteio do Bebé</title>
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        .title-glow {
-            text-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+        /* Disable text selection across the page */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top left, #fff0f5 0%, #fae8ff 40%, #f3e8ff 100%);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* Keep inputs selectable so users can type */
+        input, button, textarea {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .glow-effect {
+            box-shadow: 0 0 35px -5px rgba(236, 72, 153, 0.25);
+        }
+        .animate-pop {
+            animation: pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes pop {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Keyframes for the 5-Click Title Easter Egg Particles */
+        @keyframes particleFly {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tw-x), var(--tw-y)) scale(1.4) rotate(360deg);
+                opacity: 0;
+            }
         }
         .easter-egg-particle {
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            animation: floatAway 1.8s ease-out forwards;
+            animation: particleFly 1.8s ease-out forwards;
         }
-        @keyframes floatAway {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tw-x), var(--tw-y)) scale(1.5);
-            }
+
+        /* Pulse glow for title when Easter Egg is unlocked */
+        .title-glow {
+            animation: pulseGlow 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px rgba(236, 72, 153, 0.4); }
+            to { text-shadow: 0 0 25px rgba(219, 39, 119, 0.9), 0 0 35px rgba(168, 85, 247, 0.8); }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-amber-50 min-h-screen text-slate-800 font-sans pb-12">
+<body class="min-h-screen text-slate-800 antialiased pb-16 selection:bg-pink-200">
 
-    <!-- LANGUAGE SELECTION MODAL -->
-    <div id="languageModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl border border-pink-100">
-            <div class="text-4xl mb-3">🌍</div>
-            <h2 class="text-xl font-black text-slate-800 mb-2">Select Language</h2>
-            <p class="text-xs text-slate-500 mb-6 font-medium">Odaberite jezik / Selecione o idioma</p>
+    <!-- LANGUAGE SELECTOR OVERLAY (Loads first) -->
+    <div id="languageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white/95 rounded-3xl max-w-sm w-full p-8 text-center shadow-2xl border border-pink-100 animate-pop">
+            <div class="w-16 h-16 bg-gradient-to-tr from-pink-100 to-rose-200 text-pink-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-md shadow-pink-100">
+                🎀
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 mb-1">Welcome!</h2>
+            <p class="text-xs font-bold text-pink-600 uppercase tracking-widest mb-6">Select Language / Odaberite / Escolha</p>
+            
             <div class="space-y-3">
-                <button onclick="selectLanguage('en')" class="w-full py-3 bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
-                    <span>🇬🇧</span> English
+                <button onclick="selectLanguage('en')" class="w-full py-3.5 px-5 bg-slate-50 hover:bg-pink-500 hover:text-white border border-slate-200/80 hover:border-pink-500 rounded-2xl font-extrabold text-slate-700 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
+                    <span class="flex items-center gap-3"><span class="text-2xl">🇮🇪</span> English</span>
+                    <span class="text-slate-400 group-hover:text-white transition">➔</span>
                 </button>
-                <button onclick="selectLanguage('hr')" class="w-full py-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
-                    <span>🇭🇷</span> Hrvatski
+                <button onclick="selectLanguage('hr')" class="w-full py-3.5 px-5 bg-slate-50 hover:bg-pink-500 hover:text-white border border-slate-200/80 hover:border-pink-500 rounded-2xl font-extrabold text-slate-700 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
+                    <span class="flex items-center gap-3"><span class="text-2xl">🇭🇷</span> Hrvatski</span>
+                    <span class="text-slate-400 group-hover:text-white transition">➔</span>
                 </button>
-                <button onclick="selectLanguage('pt')" class="w-full py-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
-                    <span>🇵🇹</span> Português
+                <button onclick="selectLanguage('pt')" class="w-full py-3.5 px-5 bg-slate-50 hover:bg-pink-500 hover:text-white border border-slate-200/80 hover:border-pink-500 rounded-2xl font-extrabold text-slate-700 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
+                    <span class="flex items-center gap-3"><span class="text-2xl">🇵🇹</span> Português</span>
+                    <span class="text-slate-400 group-hover:text-white transition">➔</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN WRAPPER -->
-    <div id="mainContent" class="opacity-0 pointer-events-none transition-opacity duration-300 max-w-3xl mx-auto px-4 pt-6">
-
-        <!-- HEADER & LANGUAGE INDICATOR -->
-        <div class="flex justify-between items-center mb-6">
-            <span id="badge-text" class="text-xs font-black uppercase tracking-wider bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
-                Baby Shower Game
-            </span>
-            <button onclick="document.getElementById('languageModal').classList.remove('hidden')" class="text-xs font-bold bg-white/80 border border-slate-200 px-3 py-1 rounded-full hover:bg-white transition flex items-center gap-1 shadow-sm">
-                🌐 <span id="current-lang-code">EN</span>
-            </button>
-        </div>
-
-        <!-- HERO SECTION -->
-        <div class="text-center mb-8">
-            <h1 id="main-title" onclick="triggerEasterEgg(event)" class="text-3xl sm:text-4xl font-black text-slate-800 tracking-tight transition-transform cursor-pointer select-none mb-2">
-                The Baby Due Date Pool 👶🏼✨
-            </h1>
-            <p id="main-desc" class="text-slate-600 text-sm sm:text-base max-w-md mx-auto font-medium">
-                Guess when our baby girl will arrive! The top 3 closest guesses win awesome hampers!
-            </p>
-        </div>
-
-        <!-- COUNTDOWN BOX -->
-        <div class="bg-white/80 backdrop-blur border border-pink-100 rounded-3xl p-5 mb-8 shadow-sm text-center">
-            <p id="countdown-label" class="text-xs font-extrabold text-pink-500 uppercase tracking-widest mb-3">
-                Estimated Due Date Countdown
-            </p>
-            <div class="grid grid-cols-4 gap-2 max-w-xs mx-auto">
-                <div class="bg-pink-50/80 p-2 rounded-2xl border border-pink-100">
-                    <span id="cd-days" class="block text-2xl font-black text-pink-600">00</span>
-                    <span id="cd-lbl-days" class="text-[10px] font-bold text-slate-500 uppercase">Days</span>
-                </div>
-                <div class="bg-pink-50/80 p-2 rounded-2xl border border-pink-100">
-                    <span id="cd-hours" class="block text-2xl font-black text-pink-600">00</span>
-                    <span id="cd-lbl-hours" class="text-[10px] font-bold text-slate-500 uppercase">Hours</span>
-                </div>
-                <div class="bg-pink-50/80 p-2 rounded-2xl border border-pink-100">
-                    <span id="cd-mins" class="block text-2xl font-black text-pink-600">00</span>
-                    <span id="cd-lbl-mins" class="text-[10px] font-bold text-slate-500 uppercase">Mins</span>
-                </div>
-                <div class="bg-pink-50/80 p-2 rounded-2xl border border-pink-100">
-                    <span id="cd-secs" class="block text-2xl font-black text-pink-600">00</span>
-                    <span id="cd-lbl-secs" class="text-[10px] font-bold text-slate-500 uppercase">Secs</span>
-                </div>
+    <!-- SUCCESS / REDIRECT MODAL -->
+    <div id="successModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl border border-pink-100 animate-pop">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                🎉
             </div>
-        </div>
-
-        <!-- PRIZES BOX -->
-        <div id="prize-badge" class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 mb-8 shadow-sm">
-            <!-- Populated via JS -->
-        </div>
-
-        <!-- GUESS FORM -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-pink-100 shadow-xl mb-8">
-            <h2 id="form-heading" class="text-xl font-black text-slate-800 mb-6 text-center">
-                Place Your Guess
-            </h2>
-
-            <form id="babyPoolForm" onsubmit="handleSubmit(event)" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label id="lbl-fname" class="block text-xs font-bold text-slate-600 mb-1">First Name</label>
-                        <input type="text" id="input-fname" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 transition font-medium">
-                    </div>
-                    <div>
-                        <label id="lbl-lname" class="block text-xs font-bold text-slate-600 mb-1">Last Name</label>
-                        <input type="text" id="input-lname" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 transition font-medium">
-                    </div>
-                </div>
-
-                <div>
-                    <label id="lbl-email" class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
-                    <input type="email" id="input-email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 transition font-medium">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label id="lbl-date" class="block text-xs font-bold text-slate-600 mb-1">Guessed Date</label>
-                        <input type="date" id="input-date" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 transition font-medium">
-                    </div>
-                    <div>
-                        <label id="lbl-time" class="block text-xs font-bold text-slate-600 mb-1">Guessed Time (Tie-Breaker)</label>
-                        <input type="time" id="input-time" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 transition font-medium">
-                    </div>
-                </div>
-
-                <!-- DONATION SELECTOR -->
-                <div class="pt-2">
-                    <label id="lbl-donation" class="block text-xs font-bold text-slate-600 mb-2">Donation Entry</label>
-                    <div class="grid grid-cols-3 gap-3 mb-3">
-                        <button type="button" onclick="setDonation(5)" class="donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center">€5</button>
-                        <button type="button" onclick="setDonation(10)" class="donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center">€10</button>
-                        <button type="button" onclick="setDonation(20)" class="donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center">€20</button>
-                    </div>
-
-                    <div class="relative">
-                        <span class="absolute left-4 top-3.5 text-sm font-bold text-slate-400">€</span>
-                        <input type="number" id="customDonation" min="1" step="0.5" value="10" oninput="checkHighRoller(this.value)" class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pink-500 font-black text-slate-800 transition">
-                    </div>
-
-                    <!-- HIGH ROLLER TOAST -->
-                    <div id="highRollerToast" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 text-center animate-bounce">
-                        🌟 Wow! Thank you so much for such an extraordinary gift! 💖
-                    </div>
-                </div>
-
-                <p id="lbl-revolut-info" class="text-[11px] text-slate-500 font-medium text-center pt-2">
-                    Submitting opens Revolut in a new tab. Entries appear on the leaderboard after donation is verified!
-                </p>
-
-                <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/25 transition transform active:scale-[0.99] flex items-center justify-center gap-2">
-                    <span id="btn-submit-text">Submit & Donate via Revolut</span> 🚀
-                </button>
-            </form>
-        </div>
-
-        <!-- STATS & PROGRESS -->
-        <div class="bg-white/80 backdrop-blur rounded-3xl p-6 border border-pink-100 shadow-sm mb-8">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Raised</span>
-                <span id="stats-total" class="text-xl font-black text-emerald-600">€0.00</span>
-            </div>
-            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-4">
-                <div id="progress-bar" class="bg-gradient-to-r from-pink-500 to-emerald-400 h-full w-0 transition-all duration-500"></div>
-            </div>
-            <div class="flex justify-between text-xs font-bold text-slate-400">
-                <span>Goal: €500</span>
-                <span id="progress-text">0%</span>
-            </div>
-        </div>
-
-        <!-- TOP DONATORS -->
-        <div class="mb-8">
-            <h3 id="top-donators-title" class="text-base font-black text-slate-800 mb-3 flex items-center gap-2">
-                🌟 Top Donators
-            </h3>
-            <div id="top-donators-empty" class="text-xs text-slate-400 font-medium italic">No top donators yet!</div>
-            <div id="top-donators-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 hidden"></div>
-        </div>
-
-        <!-- LEADERBOARD FEED -->
-        <div class="bg-white/80 backdrop-blur rounded-3xl p-6 border border-pink-100 shadow-sm mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="feed-title" class="text-base font-black text-slate-800">🏆 Leaderboard</h3>
-                <span class="text-xs font-bold bg-pink-100 text-pink-600 px-2.5 py-0.5 rounded-full">
-                    <span id="stats-count">0</span> Guesses
-                </span>
-            </div>
-            <div id="feed-empty-msg" class="text-xs text-slate-400 font-medium italic text-center py-4">
-                No confirmed guesses yet. Be the first!
-            </div>
-            <div id="feed" class="space-y-2.5"></div>
-        </div>
-
-        <!-- FAQ SECTION -->
-        <div class="bg-white/80 backdrop-blur rounded-3xl p-6 border border-pink-100 shadow-sm mb-8">
-            <h3 id="faq-title" class="text-base font-black text-slate-800 mb-4">Frequently Asked Questions</h3>
-            <div id="faq-container" class="space-y-3"></div>
-        </div>
-
-        <!-- FOOTER SIGNATURE -->
-        <div class="text-center py-4">
-            <p id="thank-you-msg" class="text-xs font-bold text-slate-500">Thank you for the support!</p>
-            <p id="thank-you-signature" class="text-xs font-black text-pink-600 mt-0.5">From family Zubcic Silva 💕</p>
-        </div>
-
-    </div>
-
-    <!-- SUCCESS MODAL -->
-    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl border border-pink-100">
-            <div class="text-5xl mb-3">🎀</div>
-            <h3 id="modal-success-title" class="text-xl font-black text-slate-800 mb-2">Guess Received!</h3>
-            <p id="modal-success-desc" class="text-xs text-slate-600 font-medium leading-relaxed mb-6">
-                Please complete your donation on the opened Revolut page. Your guess will appear on the live leaderboard as soon as the donation is confirmed!
-            </p>
-            <button onclick="closeSuccessModal()" class="w-full py-3 bg-pink-500 hover:bg-pink-600 text-white font-black rounded-xl transition">
-                Got It!
+            <h3 id="modal-success-title" class="text-2xl font-black text-slate-900 mb-2">Guess Submitted!</h3>
+            <p id="modal-success-desc" class="text-sm text-slate-600 mb-6 leading-relaxed">Your entry is saved! Complete your donation on Revolut to activate your guess on the live leaderboard.</p>
+            
+            <button onclick="closeSuccessModal()" class="w-full py-3.5 px-6 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-extrabold transition shadow-lg shadow-pink-200 cursor-pointer">
+                Got it!
             </button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- HIGH ROLLER TOAST NOTIFICATION -->
+    <div id="highRollerToast" class="hidden fixed bottom-6 right-6 z-50 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white px-6 py-4 rounded-2xl shadow-2xl border border-amber-300 animate-pop flex items-center gap-3 max-w-sm">
+        <span class="text-3xl">👑</span>
+        <div>
+            <p class="font-black text-sm">High-Roller VIP Alert!</p>
+            <p class="text-xs font-semibold text-amber-100">€50+ donation detected! You're making this nursery legendary! 💖</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTENT (Hidden by default until language is selected) -->
+    <div id="mainContent" class="opacity-0 pointer-events-none transition-opacity duration-500">
+        
+        <!-- Top Language Switcher Bar -->
+        <div class="max-w-5xl mx-auto px-4 pt-6 flex justify-end">
+            <button onclick="document.getElementById('languageModal').classList.remove('hidden')" class="glass-card text-xs font-extrabold text-slate-700 hover:text-pink-600 px-4 py-2 rounded-full flex items-center gap-2 transition shadow-sm cursor-pointer border border-pink-100">
+                <span>🌍</span> <span id="current-lang-code">EN</span> ▾
+            </button>
+        </div>
+
+        <!-- Header Hero -->
+        <header class="max-w-3xl mx-auto pt-4 pb-6 px-4 text-center">
+            <span id="badge-text" class="inline-block bg-pink-200/80 text-pink-900 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-sm backdrop-blur-sm border border-pink-300/40"></span>
+            
+            <!-- Title with 5-Click Cute Animation Easter Egg -->
+            <h1 id="main-title" onclick="triggerEasterEgg(event)" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3 cursor-pointer select-none transition-all duration-300 hover:scale-105 active:scale-95"></h1>
+            
+            <p id="main-desc" class="text-base sm:text-lg text-slate-600 max-w-xl mx-auto font-semibold"></p>
+
+            <!-- Dynamic Countdown Timer Card -->
+            <div class="mt-6 glass-card rounded-3xl p-5 border border-pink-200/60 shadow-lg shadow-pink-100/60 max-w-lg mx-auto">
+                <p id="countdown-label" class="text-xs font-black text-pink-600 uppercase tracking-widest mb-3">Estimated Due Date Countdown</p>
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-white/90 rounded-2xl p-2.5 border border-pink-100">
+                        <span id="cd-days" class="block text-2xl sm:text-3xl font-black text-slate-900">00</span>
+                        <span id="cd-lbl-days" class="text-[10px] font-bold text-slate-400 uppercase">Days</span>
+                    </div>
+                    <div class="bg-white/90 rounded-2xl p-2.5 border border-pink-100">
+                        <span id="cd-hours" class="block text-2xl sm:text-3xl font-black text-slate-900">00</span>
+                        <span id="cd-lbl-hours" class="text-[10px] font-bold text-slate-400 uppercase">Hours</span>
+                    </div>
+                    <div class="bg-white/90 rounded-2xl p-2.5 border border-pink-100">
+                        <span id="cd-mins" class="block text-2xl sm:text-3xl font-black text-slate-900">00</span>
+                        <span id="cd-lbl-mins" class="text-[10px] font-bold text-slate-400 uppercase">Mins</span>
+                    </div>
+                    <div class="bg-white/90 rounded-2xl p-2.5 border border-pink-100">
+                        <span id="cd-secs" class="block text-2xl sm:text-3xl font-black text-slate-900">00</span>
+                        <span id="cd-lbl-secs" class="text-[10px] font-bold text-slate-400 uppercase">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prizes Card (Centered) -->
+            <div id="prize-badge" class="mt-5 glass-card rounded-2xl p-5 text-center border-amber-200/80 bg-amber-50/50 shadow-sm max-w-lg mx-auto text-sm text-slate-700"></div>
+        </header>
+
+        <!-- Stats Counter Bar -->
+        <section class="max-w-5xl mx-auto px-4 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="glass-card rounded-2xl p-5 border border-white/90 shadow-sm text-center">
+                    <span class="text-2xl">💰</span>
+                    <p id="stat-lbl-raised" class="text-xs font-black text-slate-400 uppercase tracking-wider mt-1">Total Raised</p>
+                    <div id="stats-total" class="text-2xl font-black text-pink-600 mt-0.5">€0.00</div>
+                </div>
+                <div class="glass-card rounded-2xl p-5 border border-white/90 shadow-sm text-center">
+                    <span class="text-2xl">🎟️</span>
+                    <p id="stat-lbl-guesses" class="text-xs font-black text-slate-400 uppercase tracking-wider mt-1">Confirmed Guesses</p>
+                    <div id="stats-count" class="text-2xl font-black text-slate-800 mt-0.5">0</div>
+                </div>
+                <div class="glass-card rounded-2xl p-5 border border-white/90 shadow-sm text-center">
+                    <span class="text-2xl">🎯</span>
+                    <p id="stat-lbl-goal" class="text-xs font-black text-slate-400 uppercase tracking-wider mt-1">Nursery Goal</p>
+                    <div id="stats-goal" class="text-2xl font-black text-purple-600 mt-0.5">€500</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="glass-card rounded-2xl p-4 mt-4 border border-white/90 shadow-sm">
+                <div class="flex justify-between items-center text-xs font-extrabold text-slate-600 mb-2">
+                    <span id="lbl-progress">Goal Progress</span>
+                    <span id="progress-text" class="text-pink-600">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200/60">
+                    <div id="progress-bar" class="bg-gradient-to-r from-pink-500 via-rose-400 to-purple-500 h-full rounded-full transition-all duration-700 shadow-sm" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOP DONATORS HIGHLIGHT SECTION -->
+        <section class="max-w-5xl mx-auto px-4 mb-8">
+            <div class="glass-card rounded-3xl p-6 border border-amber-200/70 bg-gradient-to-br from-amber-50/40 via-white/80 to-pink-50/40 shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b border-amber-100">
+                    <h3 id="top-donators-title" class="text-xl font-black text-slate-900 flex items-center gap-2">
+                        🌟 Top Donators
+                    </h3>
+                    <span class="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full border border-amber-200/80">
+                        Generosity Wall
+                    </span>
+                </div>
+                <div id="top-donators-empty" class="text-sm text-slate-400 italic py-4 text-center">
+                    No donations confirmed yet!
+                </div>
+                <div id="top-donators-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 hidden">
+                    <!-- Top 3 Donators Cards Dynamic JS Injected -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Layout -->
+        <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-12 gap-8 items-start mb-12">
+            
+            <!-- Left Side: Form (7 Columns) -->
+            <section class="md:col-span-7 glass-card glow-effect rounded-3xl p-6 sm:p-8 shadow-xl border border-white/90">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center font-black text-lg shadow-md shadow-pink-200">
+                        ✍️
+                    </div>
+                    <h2 id="form-heading" class="text-2xl font-black text-slate-900"></h2>
+                </div>
+                
+                <form id="babyPoolForm" class="space-y-5" onsubmit="handleSubmit(event)">
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="lbl-fname" class="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5"></label>
+                            <input type="text" id="input-fname" required class="w-full bg-white/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-pink-400 transition shadow-inner">
+                        </div>
+                        <div>
+                            <label id="lbl-lname" class="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5"></label>
+                            <input type="text" id="input-lname" required class="w-full bg-white/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-pink-400 transition shadow-inner">
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label id="lbl-email" class="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5"></label>
+                        <input type="email" id="input-email" required class="w-full bg-white/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-pink-400 transition shadow-inner">
+                    </div>
+
+                    <!-- Date & Time Inputs -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="lbl-date" class="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5"></label>
+                            <input type="date" id="input-date" required class="w-full bg-white/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-pink-400 transition shadow-inner">
+                        </div>
+                        <div>
+                            <label id="lbl-time" class="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5"></label>
+                            <input type="time" id="input-time" required class="w-full bg-white/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-pink-400 transition shadow-inner">
+                        </div>
+                    </div>
+
+                    <!-- Donation Selector -->
+                    <div class="bg-pink-50/60 p-4 rounded-2xl border border-pink-100/90">
+                        <label id="lbl-donation" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2.5"></label>
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            <button type="button" onclick="setDonation(5)" class="donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center">€5</button>
+                            <button type="button" onclick="setDonation(10)" class="donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center">€10</button>
+                            <button type="button" onclick="setDonation(20)" class="donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center">€20</button>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-2.5 text-sm font-black text-slate-400">€</span>
+                            <input type="number" id="customDonation" min="1" value="10" oninput="checkHighRoller(this.value)" class="w-full pl-8 bg-white border border-slate-200 rounded-xl p-2.5 text-sm font-black text-slate-800 focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:opacity-95 text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-lg shadow-pink-300/60 cursor-pointer text-base active:scale-95">
+                            <span>💳</span>
+                            <span id="btn-submit-text">Submit Guess & Donate via Revolut</span>
+                        </button>
+                        <p id="lbl-revolut-info" class="text-xs text-slate-400 text-center mt-3 font-semibold"></p>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Side: Live Standings Feed (5 Columns) -->
+            <section class="md:col-span-5 glass-card rounded-3xl p-6 shadow-xl border border-white/90">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <h2 id="feed-title" class="text-xl font-black text-slate-900 flex items-center gap-2"></h2>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-black">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live
+                    </span>
+                </div>
+
+                <div id="feed-empty-msg" class="text-sm text-slate-400 italic py-8 text-center">Loading standings...</div>
+                
+                <div class="space-y-3 max-h-[480px] overflow-y-auto pr-1" id="feed">
+                    <!-- Dynamic Leaderboard Rows -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Family Thank You & FAQ Section -->
+        <section class="max-w-3xl mx-auto px-4 space-y-6">
+            <!-- Thank You Banner -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 text-center border border-pink-200/80 bg-gradient-to-r from-pink-500/10 via-rose-400/10 to-purple-500/10 shadow-lg">
+                <span class="text-3xl">💖</span>
+                <p id="thank-you-msg" class="text-base sm:text-lg font-black text-slate-800 mt-2">Thank you for the support!</p>
+                <p id="thank-you-signature" class="text-sm font-extrabold text-pink-600 mt-1">From family Zubcic Silva 💕</p>
+            </div>
+
+            <!-- Interactive FAQ Accordion Section -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/90 shadow-xl">
+                <div class="text-center mb-6">
+                    <span class="text-2xl">❓</span>
+                    <h3 id="faq-title" class="text-2xl font-black text-slate-900 mt-1">Frequently Asked Questions</h3>
+                </div>
+                <div id="faq-container" class="space-y-3">
+                    <!-- Accordion Items Injected Here -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+
     <script>
         // --- BASIC PROTECTION SCRIPTS ---
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -287,7 +380,7 @@
             }
         }
 
-        // --- HIGH ROLLER CHECK & PRESET UNSELECT FIX ---
+        // --- HIGH ROLLER DONATION CHECK (€50 THRESHOLD) ---
         function checkHighRoller(val) {
             const toast = document.getElementById('highRollerToast');
             if (parseFloat(val) >= 50) {
@@ -295,33 +388,6 @@
             } else {
                 toast.classList.add('hidden');
             }
-
-            // Unselect preset buttons when user manually types in custom field
-            const btns = document.querySelectorAll('.donation-btn');
-            btns.forEach(b => {
-                b.className = "donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center";
-            });
-        }
-
-        function setDonation(val) {
-            document.getElementById('customDonation').value = val;
-            
-            const toast = document.getElementById('highRollerToast');
-            if (parseFloat(val) >= 50) {
-                toast.classList.remove('hidden');
-            } else {
-                toast.classList.add('hidden');
-            }
-
-            // Highlight ONLY the clicked button
-            const btns = document.querySelectorAll('.donation-btn');
-            btns.forEach(b => {
-                if (b.innerText.trim() === `€${val}`) {
-                    b.className = "donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center";
-                } else {
-                    b.className = "donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center";
-                }
-            });
         }
 
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
@@ -476,6 +542,7 @@
 
             renderFAQs(dict.faqs);
 
+            // Hide language modal and reveal main UI
             document.getElementById('languageModal').classList.add('hidden');
             const mainEl = document.getElementById('mainContent');
             mainEl.classList.remove('opacity-0', 'pointer-events-none');
@@ -488,7 +555,7 @@
                 const item = document.createElement('div');
                 item.className = "border border-slate-200/80 rounded-2xl overflow-hidden bg-white/70";
                 item.innerHTML = `
-                    <button type="button" onclick="toggleFaq(${index})" class="w-full text-left p-4 font-bold text-slate-800 flex justify-between items-center hover:bg-pink-50/50 transition">
+                    <button onclick="toggleFaq(${index})" class="w-full text-left p-4 font-bold text-slate-800 flex justify-between items-center hover:bg-pink-50/50 transition">
                         <span>${faq.q}</span>
                         <span id="faq-icon-${index}" class="text-pink-500 font-black text-lg transition-transform duration-200">+</span>
                     </button>
@@ -535,18 +602,25 @@
             document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
         }
 
+        function setDonation(val) {
+            document.getElementById('customDonation').value = val;
+            checkHighRoller(val);
+            const btns = document.querySelectorAll('.donation-btn');
+            btns.forEach(b => {
+                if (b.innerText === `€${val}`) {
+                    b.className = "donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center";
+                } else {
+                    b.className = "donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center";
+                }
+            });
+        }
+
         async function fetchLeaderboard() {
             try {
-                // Fetch with cache-busting timestamp
-                const res = await fetch(`${SHEETDB_URL}?t=${Date.now()}`);
+                const res = await fetch(SHEETDB_URL);
                 const data = await res.json();
 
-                // FIX: Matches 'confirmed' or 'paid' case-insensitively
-                const verified = data.filter(item => {
-                    if (!item.status) return false;
-                    const statusClean = String(item.status).trim().toLowerCase();
-                    return statusClean === 'confirmed' || statusClean === 'paid';
-                });
+                const verified = data.filter(item => item.status && item.status.toLowerCase() === 'confirmed');
 
                 totalDonatedPool = verified.reduce((acc, curr) => acc + (parseFloat(curr.donationValue) || 0), 0);
                 confirmedGuessesCount = verified.length;
@@ -623,7 +697,7 @@
 
             emptyEl.classList.add('hidden');
 
-            [...data].reverse().forEach(item => {
+            data.reverse().forEach(item => {
                 const row = document.createElement('div');
                 row.className = "bg-white/90 p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between";
                 row.innerHTML = `
@@ -652,6 +726,7 @@
             const guessedTime = document.getElementById('input-time').value;
             const donationValue = document.getElementById('customDonation').value;
 
+            // Generate current submission timestamp formatted as "YYYY-MM-DD HH:MM:SS"
             const now = new Date();
             const submittedAt = now.getFullYear() + '-' +
                 String(now.getMonth() + 1).padStart(2, '0') + '-' +
@@ -660,6 +735,7 @@
                 String(now.getMinutes()).padStart(2, '0') + ':' +
                 String(now.getSeconds()).padStart(2, '0');
 
+            // Using key names matching your Google Sheet row 1 headers:
             const payload = {
                 data: [{
                     firstName,
@@ -698,6 +774,7 @@
             document.getElementById('successModal').classList.add('hidden');
         }
 
+        // Initialize Countdown & Leaderboard Data
         window.addEventListener('DOMContentLoaded', () => {
             updateCountdown();
             setInterval(updateCountdown, 1000);
