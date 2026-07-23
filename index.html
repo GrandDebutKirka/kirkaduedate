@@ -148,6 +148,26 @@
             </div>
         </section>
 
+        <!-- TOP DONATORS HIGHLIGHT SECTION -->
+        <section class="max-w-5xl mx-auto px-4 mb-8">
+            <div class="glass-card rounded-3xl p-6 border border-amber-200/70 bg-gradient-to-br from-amber-50/40 via-white/80 to-pink-50/40 shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b border-amber-100">
+                    <h3 id="top-donators-title" class="text-xl font-black text-slate-900 flex items-center gap-2">
+                        🌟 Top Donators
+                    </h3>
+                    <span class="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full border border-amber-200/80">
+                        Generosity Wall
+                    </span>
+                </div>
+                <div id="top-donators-empty" class="text-sm text-slate-400 italic py-4 text-center">
+                    No donations confirmed yet!
+                </div>
+                <div id="top-donators-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 hidden">
+                    <!-- Top 3 Donators Cards Dynamic JS Injected -->
+                </div>
+            </div>
+        </section>
+
         <!-- Main Content Layout -->
         <main class="max-w-5xl mx-auto px-4 grid md:grid-cols-12 gap-8 items-start mb-12">
             
@@ -252,7 +272,7 @@
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
-        // TARGET DUE DATE (Change to match real expected due date)
+        // TARGET DUE DATE
         const dueTargetDate = new Date("2026-08-15T00:00:00").getTime();
 
         let totalDonatedPool = 0;
@@ -277,6 +297,7 @@
                 revolutInfo: "Submitting opens Revolut in a new tab. Entries appear on the leaderboard after payment is verified!",
                 btnSubmit: "Submit & Donate via Revolut",
                 feedTitle: "🏆 Leaderboard",
+                topDonatorsTitle: "🌟 Top Donators",
                 emptyFeed: "No confirmed guesses yet. Be the first!",
                 modalTitle: "Guess Received! 🎀",
                 modalDesc: "Please complete your payment on the opened Revolut tab. Your guess will appear on the live leaderboard as soon as payment is confirmed!",
@@ -307,6 +328,7 @@
                 revolutInfo: "Slanje otvara Revolut u novom prozoru. Prognoza se prikazuje nakon potvrde uplate!",
                 btnSubmit: "Pošalji i Plati putem Revoluta",
                 feedTitle: "🏆 Ljestvica Poretka",
+                topDonatorsTitle: "🌟 Najveći Donatori",
                 emptyFeed: "Još nema potvrđenih prognoza. Budi prvi!",
                 modalTitle: "Prognoza Zaprimljena! 🎀",
                 modalDesc: "Molimo dovršite uplatu na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim uplata bude potvrđena!",
@@ -337,6 +359,7 @@
                 revolutInfo: "Ao enviar, o Revolut abrirá num novo separador. O palpite surge no painel após validação!",
                 btnSubmit: "Enviar e Pagar via Revolut",
                 feedTitle: "🏆 Classificação",
+                topDonatorsTitle: "🌟 Maiores Doadorres",
                 emptyFeed: "Ainda não há palpites confirmados. Seja o primeiro!",
                 modalTitle: "Palpite Recebido! 🎀",
                 modalDesc: "Por favor conclua o pagamento no separador do Revolut. O seu palpite aparecerá no painel assim que a doação for confirmada!",
@@ -378,6 +401,7 @@
             document.getElementById('lbl-revolut-info').innerText = dict.revolutInfo;
             document.getElementById('btn-submit-text').innerText = dict.btnSubmit;
             document.getElementById('feed-title').innerText = dict.feedTitle;
+            document.getElementById('top-donators-title').innerText = dict.topDonatorsTitle;
             document.getElementById('modal-success-title').innerText = dict.modalTitle;
             document.getElementById('modal-success-desc').innerText = dict.modalDesc;
             document.getElementById('faq-title').innerText = dict.faqTitle;
@@ -503,7 +527,21 @@
                     if (paidEntries.length > 0) {
                         document.getElementById('feed-empty-msg').classList.add('hidden');
                         
-                        [...paidEntries].reverse().forEach((entry, idx) => {
+                        // Calculate Top Donators (aggregate donations per person)
+                        const donatorsMap = {};
+                        paidEntries.forEach(entry => {
+                            const fullName = `${entry.firstName.trim()} ${entry.lastName.trim()}`;
+                            const amt = parseFloat(entry.donationValue) || 0;
+                            donatorsMap[fullName] = (donatorsMap[fullName] || 0) + amt;
+                        });
+
+                        const sortedDonators = Object.entries(donatorsMap)
+                            .map(([name, total]) => ({ name, total }))
+                            .sort((a, b) => b.total - a.total);
+
+                        renderTopDonators(sortedDonators);
+
+                        [...paidEntries].reverse().forEach((entry) => {
                             const amount = parseFloat(entry.donationValue) || 0;
                             totalDonatedPool += amount;
                             confirmedGuessesCount++;
@@ -513,16 +551,11 @@
                             const formattedDate = parsedDate.toLocaleDateString(localeMap[currentLang] || 'en-US', { month: 'short', day: 'numeric' });
                             const initials = (entry.firstName[0] || '') + (entry.lastName[0] || '');
 
-                            let rankBadge = '';
-                            if(idx === 0) rankBadge = '🥇';
-                            else if(idx === 1) rankBadge = '🥈';
-                            else if(idx === 2) rankBadge = '🥉';
-
                             const feedItem = `
                                 <div class="p-3.5 bg-white/95 border border-slate-100 rounded-2xl flex items-center justify-between shadow-sm hover:shadow-md transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-700 font-black flex items-center justify-center text-xs border border-pink-200/80 shadow-inner">
-                                            ${rankBadge || initials.toUpperCase()}
+                                            ${initials.toUpperCase()}
                                         </div>
                                         <div>
                                             <div class="text-sm font-extrabold text-slate-800">${entry.firstName} ${entry.lastName}</div>
@@ -539,15 +572,59 @@
                     } else {
                         document.getElementById('feed-empty-msg').classList.remove('hidden');
                         document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
+                        document.getElementById('top-donators-empty').classList.remove('hidden');
+                        document.getElementById('top-donators-grid').classList.add('hidden');
                     }
                 } else {
                     document.getElementById('feed-empty-msg').classList.remove('hidden');
                     document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
+                    document.getElementById('top-donators-empty').classList.remove('hidden');
+                    document.getElementById('top-donators-grid').classList.add('hidden');
                 }
                 updateVisualCounters();
             } catch (err) {
                 console.error("Error loading live guesses:", err);
             }
+        }
+
+        function renderTopDonators(donators) {
+            const grid = document.getElementById('top-donators-grid');
+            const emptyMsg = document.getElementById('top-donators-empty');
+
+            if (!donators || donators.length === 0) {
+                emptyMsg.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            grid.classList.remove('hidden');
+            grid.innerHTML = '';
+
+            const medals = ['🥇', '🥈', '🥉'];
+            const bgStyles = [
+                'bg-gradient-to-r from-amber-100 to-yellow-50 border-amber-200 text-amber-900',
+                'bg-gradient-to-r from-slate-100 to-slate-50 border-slate-200 text-slate-800',
+                'bg-gradient-to-r from-orange-100 to-amber-50 border-orange-200 text-orange-900'
+            ];
+
+            donators.slice(0, 3).forEach((d, i) => {
+                const card = `
+                    <div class="p-3.5 rounded-2xl border ${bgStyles[i] || 'bg-white border-slate-100'} flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-2xl">${medals[i] || '🏅'}</span>
+                            <div>
+                                <div class="text-xs font-black uppercase tracking-wider text-slate-400">Rank #${i + 1}</div>
+                                <div class="text-sm font-extrabold">${d.name}</div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-black text-pink-600 bg-white/80 px-2.5 py-1 rounded-xl border border-pink-100">
+                            €${d.total.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
         }
 
         async function handleSubmit(e) {
