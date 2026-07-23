@@ -98,7 +98,8 @@
         <!-- Header Hero -->
         <header class="max-w-3xl mx-auto pt-4 pb-6 px-4 text-center">
             <span id="badge-text" class="inline-block bg-pink-200/80 text-pink-900 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-sm backdrop-blur-sm border border-pink-300/40"></span>
-            <h1 id="main-title" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3"></h1>
+            <!-- Title with Easter Egg click listener -->
+            <h1 id="main-title" onclick="triggerEasterEgg()" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3 cursor-pointer select-none"></h1>
             <p id="main-desc" class="text-base sm:text-lg text-slate-600 max-w-xl mx-auto font-semibold"></p>
 
             <!-- Dynamic Countdown Timer Card -->
@@ -289,32 +290,28 @@
     </div>
 
     <script>
-        // --- BASIC HTML & CODE PROTECTION SCRIPTS ---
-        // 1. Disable Right-Click Context Menu
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
+        // --- BASIC PROTECTION SCRIPTS ---
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && (['I','i','J','j','C','c'].includes(e.key))) e.preventDefault();
+            if (e.ctrlKey && (['u','U','s','S'].includes(e.key))) e.preventDefault();
         });
 
-        // 2. Disable Common Developer Keyboard Shortcuts
-        document.addEventListener('keydown', function(e) {
-            // Disable F12
-            if (e.key === 'F12') {
-                e.preventDefault();
+        // --- EASTER EGG SCRIPT ---
+        let secretClickCount = 0;
+        function triggerEasterEgg() {
+            secretClickCount++;
+            if (secretClickCount === 5) {
+                alert("🎉 SECRET UNLOCKED! You found the baby's secret code! May the odds (and the exact minute) be ever in your favor! 👶🏼🍼");
+                document.body.style.background = "radial-gradient(circle at top left, #fbcfe8 0%, #f472b6 50%, #c084fc 100%)";
+                secretClickCount = 0;
             }
-            // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-                e.preventDefault();
-            }
-            // Disable Ctrl+U (View Source) & Ctrl+S (Save Page)
-            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
-                e.preventDefault();
-            }
-        });
+        }
 
         const SHEETDB_URL = "https://sheetdb.io/api/v1/pevqgy4a5df4x";
         const REAL_PAYMENT_URL = "https://revolut.me/tiagob91b"; 
 
-        // Target Due Date: August 5th, 2026
         const dueTargetDate = new Date("2026-08-05T00:00:00").getTime();
 
         let totalDonatedPool = 0;
@@ -342,7 +339,7 @@
                 topDonatorsTitle: "🌟 Top Donators",
                 emptyFeed: "No confirmed guesses yet. Be the first!",
                 modalTitle: "Guess Received! 🎀",
-                modalDesc: "Please complete your donation on the opened Revolut tab. Your guess will appear on the live leaderboard as soon as donation is confirmed!",
+                modalDesc: "Please complete your donation on the opened Revolut page. Your guess will appear on the live leaderboard as soon as the donation is confirmed!",
                 thankYouMsg: "Thank you for the support!",
                 thankYouSig: "From family Zubcic Silva 💕",
                 faqTitle: "Frequently Asked Questions",
@@ -353,7 +350,7 @@
                     { q: "When will the leaderboard update?", a: "Your entry appears live on the leaderboard as soon as your Revolut donation is confirmed by us." }
                 ],
                 placeholderFname: "Troy",
-                placeholderLname: "Parrot",
+                placeholderLname: "Parrott",
                 currencySign: "€"
             },
             hr: {
@@ -370,13 +367,13 @@
                 date: "Datum rođenja",
                 time: "Vrijeme (Za izjednačene)",
                 donation: "Donacija",
-                revolutInfo: "Slanje otvara Revolut u novom prozoru. Prognoza se prikazuje nakon potvrde uplate!",
-                btnSubmit: "Pošalji i Plati putem Revoluta",
+                revolutInfo: "Slanje otvara Revolut u novom prozoru. Prognoza se prikazuje nakon potvrde donacije!",
+                btnSubmit: "Pošalji i Doniraj putem Revoluta",
                 feedTitle: "🏆 Ljestvica Poretka",
                 topDonatorsTitle: "🌟 Najveći Donatori",
                 emptyFeed: "Još nema potvrđenih prognoza. Budi prvi!",
                 modalTitle: "Prognoza Zaprimljena! 🎀",
-                modalDesc: "Molimo dovršite uplatu na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim uplata bude potvrđena!",
+                modalDesc: "Molimo dovršite donaciju na otvorenoj Revolut stranici. Vaša prognoza će se prikazati na ljestvici čim donacija bude potvrđena!",
                 thankYouMsg: "Hvala vam na podršci!",
                 thankYouSig: "Od obitelji Zubcic Silva 💕",
                 faqTitle: "Često Postavljana Pitanja",
@@ -384,7 +381,7 @@
                     { q: "Kome su namijenjene ove donacije?", a: "Umjesto organiziranja klasičnog baby showera uživo, odlučili smo napraviti zabavnu i interaktivnu igru s nagradama! Vaše donacije izravno pomažu u opremanju sobe za našu bebicu i nabavci svih potrebnih svakodnevnih potrepština." },
                     { q: "Kako se određuje pobjednik?", a: "Pobjednik je osoba čija je prognoza najbliža točnom datumu i minuti rođenja bebice!" },
                     { q: "Mogu li poslati više prognoza?", a: "Da! Možete poslati neograničen broj prognoza s različitim datumima i vremenima." },
-                    { q: "Kada se ljestvica ažurira?", a: "Vaša prognoza se pojavljuje čim potvrdimo vašu uplatu na Revolutu." }
+                    { q: "Kada se ljestvica ažurira?", a: "Vaša prognoza se pojavljuje čim potvrdimo vašu donaciju na Revolutu." }
                 ],
                 placeholderFname: "Luka",
                 placeholderLname: "Modrić",
@@ -404,13 +401,13 @@
                 date: "Data Prevista",
                 time: "Hora (Desempate)",
                 donation: "Valor da Doação",
-                revolutInfo: "Ao enviar, o Revolut abrirá num novo separador. O palpite surge no painel após validação!",
+                revolutInfo: "Ao enviar, o Revolut abrirá num novo separador. O palpite surge no painel após validação da doação!",
                 btnSubmit: "Enviar e Doar via Revolut",
                 feedTitle: "🏆 Classificação",
-                topDonatorsTitle: "🌟 Maiores Doadorres",
+                topDonatorsTitle: "🌟 Maiores Doadores",
                 emptyFeed: "Ainda não há palpites confirmados. Seja o primeiro!",
                 modalTitle: "Palpite Recebido! 🎀",
-                modalDesc: "Por favor conclua o doação no separador do Revolut. O seu palpite aparecerá no painel assim que a doação for confirmada!",
+                modalDesc: "Por favor conclua a doação no separador do Revolut. O seu palpite aparecerá na classificação assim que a doação for confirmada!",
                 thankYouMsg: "Obrigado pelo vosso apoio!",
                 thankYouSig: "Da família Zubcic Silva 💕",
                 faqTitle: "Perguntas Frequentes",
@@ -462,27 +459,29 @@
             document.getElementById('input-fname').placeholder = dict.placeholderFname;
             document.getElementById('input-lname').placeholder = dict.placeholderLname;
 
-            renderFaqs(dict.faqs);
+            renderFAQs(dict.faqs);
 
             document.getElementById('languageModal').classList.add('hidden');
             document.getElementById('mainContent').classList.remove('opacity-0');
-
-            fetchLiveGuesses();
         }
 
-        function renderFaqs(faqs) {
+        function renderFAQs(faqs) {
             const container = document.getElementById('faq-container');
-            container.innerHTML = faqs.map((faq, i) => `
-                <div class="border border-slate-100 rounded-2xl bg-white/70 overflow-hidden shadow-sm">
-                    <button type="button" onclick="toggleFaq(${i})" class="w-full p-4 text-left font-bold text-slate-800 flex justify-between items-center cursor-pointer hover:text-pink-600 transition">
+            container.innerHTML = '';
+            faqs.forEach((faq, index) => {
+                const item = document.createElement('div');
+                item.className = "border border-slate-200/80 rounded-2xl overflow-hidden bg-white/70";
+                item.innerHTML = `
+                    <button onclick="toggleFaq(${index})" class="w-full text-left p-4 font-bold text-slate-800 flex justify-between items-center hover:bg-pink-50/50 transition">
                         <span>${faq.q}</span>
-                        <span id="faq-icon-${i}" class="text-slate-400 font-black transition-transform duration-300">＋</span>
+                        <span id="faq-icon-${index}" class="text-pink-500 font-black text-lg transition-transform duration-200">+</span>
                     </button>
-                    <div id="faq-ans-${i}" class="hidden p-4 pt-0 text-xs font-semibold text-slate-600 border-t border-slate-50 leading-relaxed">
+                    <div id="faq-ans-${index}" class="hidden p-4 pt-0 text-sm text-slate-600 font-medium leading-relaxed border-t border-slate-100">
                         ${faq.a}
                     </div>
-                </div>
-            `).join('');
+                `;
+                container.appendChild(item);
+            });
         }
 
         function toggleFaq(index) {
@@ -490,231 +489,206 @@
             const icon = document.getElementById(`faq-icon-${index}`);
             if (ans.classList.contains('hidden')) {
                 ans.classList.remove('hidden');
-                icon.innerText = 'ー';
+                icon.innerText = '−';
             } else {
                 ans.classList.add('hidden');
-                icon.innerText = '＋';
+                icon.innerText = '+';
             }
         }
 
-        // Live Countdown Clock
-        setInterval(() => {
+        function updateCountdown() {
             const now = new Date().getTime();
             const diff = dueTargetDate - now;
 
-            if (diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
-                document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
-                document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
-                document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+            if (diff <= 0) {
+                document.getElementById('cd-days').innerText = "00";
+                document.getElementById('cd-hours').innerText = "00";
+                document.getElementById('cd-mins').innerText = "00";
+                document.getElementById('cd-secs').innerText = "00";
+                return;
             }
-        }, 1000);
 
-        function setDonation(amount) {
-            document.getElementById('customDonation').value = amount;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+            document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+        }
+
+        function setDonation(val) {
+            document.getElementById('customDonation').value = val;
             const btns = document.querySelectorAll('.donation-btn');
-            btns.forEach(btn => {
-                if(btn.innerText === '€' + amount) {
-                    btn.className = "donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center";
+            btns.forEach(b => {
+                if (b.innerText === `€${val}`) {
+                    b.className = "donation-btn py-2.5 bg-pink-500 text-white border border-pink-500 rounded-xl text-sm font-black transition cursor-pointer shadow-sm text-center";
                 } else {
-                    btn.className = "donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center";
+                    b.className = "donation-btn py-2.5 bg-white hover:bg-pink-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 transition cursor-pointer shadow-sm text-center";
                 }
             });
         }
 
-        function updateVisualCounters() {
-            const dict = translations[currentLang];
-            document.getElementById('stats-total').innerText = dict.currencySign + totalDonatedPool.toFixed(2);
+        async function fetchLeaderboard() {
+            try {
+                const res = await fetch(SHEETDB_URL);
+                const data = await res.json();
+
+                const verified = data.filter(item => item.status && item.status.toLowerCase() === 'confirmed');
+
+                totalDonatedPool = verified.reduce((acc, curr) => acc + (parseFloat(curr.donation) || 0), 0);
+                confirmedGuessesCount = verified.length;
+
+                updateStats();
+                renderTopDonators(verified);
+                renderFeed(verified);
+            } catch (err) {
+                console.error("Error loading feed:", err);
+                document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stats-total').innerText = `€${totalDonatedPool.toFixed(2)}`;
             document.getElementById('stats-count').innerText = confirmedGuessesCount;
             
-            let progressPercentage = (totalDonatedPool / targetGoal) * 100;
-            if (progressPercentage > 100) progressPercentage = 100;
-            
-            document.getElementById('progress-bar').style.width = progressPercentage + '%';
-            document.getElementById('progress-text').innerText = Math.round(progressPercentage) + "%";
+            const pct = Math.min(100, Math.round((totalDonatedPool / targetGoal) * 100));
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('progress-text').innerText = `${pct}%`;
         }
 
-        function parseSheetDate(rawDate) {
-            if (!rawDate) return new Date();
-            let str = String(rawDate).trim();
-            if (!isNaN(str)) {
-                const serial = parseFloat(str);
-                const utc_days = Math.floor(serial - 25569);
-                return new Date(utc_days * 86400 * 1000);
-            }
-            return new Date(str.replace(/'/g, ''));
-        }
+        function renderTopDonators(data) {
+            const emptyEl = document.getElementById('top-donators-empty');
+            const gridEl = document.getElementById('top-donators-grid');
 
-        function parseSheetTime(rawTime) {
-            if (!rawTime) return "12:00";
-            let str = String(rawTime).replace(',', '.').trim();
-            if (!isNaN(str) && parseFloat(str) < 1) {
-                const totalSeconds = Math.round(parseFloat(str) * 86400);
-                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-                return `${hours}:${minutes}`;
-            }
-            return String(rawTime).replace(/'/g, '');
-        }
-
-        async function fetchLiveGuesses() {
-            try {
-                const response = await fetch(SHEETDB_URL);
-                const data = await response.json();
-                
-                const feed = document.getElementById('feed');
-                feed.innerHTML = '';
-                totalDonatedPool = 0;
-                confirmedGuessesCount = 0;
-
-                const localeMap = { en: 'en-US', hr: 'hr-HR', pt: 'pt-PT' };
-
-                if (Array.isArray(data) && data.length > 0) {
-                    const paidEntries = data.filter(entry => entry.status && entry.status.toLowerCase() === 'paid');
-
-                    if (paidEntries.length > 0) {
-                        document.getElementById('feed-empty-msg').classList.add('hidden');
-                        
-                        // Calculate Top Donators
-                        const donatorsMap = {};
-                        paidEntries.forEach(entry => {
-                            const fullName = `${entry.firstName.trim()} ${entry.lastName.trim()}`;
-                            const amt = parseFloat(entry.donationValue) || 0;
-                            donatorsMap[fullName] = (donatorsMap[fullName] || 0) + amt;
-                        });
-
-                        const sortedDonators = Object.entries(donatorsMap)
-                            .map(([name, total]) => ({ name, total }))
-                            .sort((a, b) => b.total - a.total);
-
-                        renderTopDonators(sortedDonators);
-
-                        [...paidEntries].reverse().forEach((entry) => {
-                            const amount = parseFloat(entry.donationValue) || 0;
-                            totalDonatedPool += amount;
-                            confirmedGuessesCount++;
-
-                            const parsedDate = parseSheetDate(entry.guessedDate);
-                            const cleanTime = parseSheetTime(entry.guessedTime);
-                            const formattedDate = parsedDate.toLocaleDateString(localeMap[currentLang] || 'en-US', { month: 'short', day: 'numeric' });
-                            const initials = (entry.firstName[0] || '') + (entry.lastName[0] || '');
-
-                            const feedItem = `
-                                <div class="p-3.5 bg-white/95 border border-slate-100 rounded-2xl flex items-center justify-between shadow-sm hover:shadow-md transition">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-700 font-black flex items-center justify-center text-xs border border-pink-200/80 shadow-inner">
-                                            ${initials.toUpperCase()}
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-extrabold text-slate-800">${entry.firstName} ${entry.lastName}</div>
-                                            <div class="text-xs text-slate-500 font-semibold">${translations[currentLang].date}: <span class="text-pink-600 font-bold">${formattedDate}</span> @ ${cleanTime}</div>
-                                        </div>
-                                    </div>
-                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs px-2.5 py-1 rounded-full font-black">
-                                        +${translations[currentLang].currencySign}${amount}
-                                    </span>
-                                </div>
-                            `;
-                            feed.insertAdjacentHTML('beforeend', feedItem);
-                        });
-                    } else {
-                        document.getElementById('feed-empty-msg').classList.remove('hidden');
-                        document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
-                        document.getElementById('top-donators-empty').classList.remove('hidden');
-                        document.getElementById('top-donators-grid').classList.add('hidden');
-                    }
-                } else {
-                    document.getElementById('feed-empty-msg').classList.remove('hidden');
-                    document.getElementById('feed-empty-msg').innerText = translations[currentLang].emptyFeed;
-                    document.getElementById('top-donators-empty').classList.remove('hidden');
-                    document.getElementById('top-donators-grid').classList.add('hidden');
-                }
-                updateVisualCounters();
-            } catch (err) {
-                console.error("Error loading live guesses:", err);
-            }
-        }
-
-        function renderTopDonators(donators) {
-            const grid = document.getElementById('top-donators-grid');
-            const emptyMsg = document.getElementById('top-donators-empty');
-
-            if (!donators || donators.length === 0) {
-                emptyMsg.classList.remove('hidden');
-                grid.classList.add('hidden');
+            if (!data || data.length === 0) {
+                emptyEl.classList.remove('hidden');
+                gridEl.classList.add('hidden');
                 return;
             }
 
-            emptyMsg.classList.add('hidden');
-            grid.classList.remove('hidden');
-            grid.innerHTML = '';
+            // Aggregate donations per person
+            const totals = {};
+            data.forEach(item => {
+                const name = `${item.fname || ''} ${item.lname || ''}`.trim() || 'Anonymous';
+                const amt = parseFloat(item.donation) || 0;
+                totals[name] = (totals[name] || 0) + amt;
+            });
 
-            const medals = ['🥇', '🥈', '🥉'];
-            const bgStyles = [
-                'bg-gradient-to-r from-amber-100 to-yellow-50 border-amber-200 text-amber-900',
-                'bg-gradient-to-r from-slate-100 to-slate-50 border-slate-200 text-slate-800',
-                'bg-gradient-to-r from-orange-100 to-amber-50 border-orange-200 text-orange-900'
-            ];
+            const sorted = Object.entries(totals)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
 
-            donators.slice(0, 3).forEach((d, i) => {
-                const card = `
-                    <div class="p-3.5 rounded-2xl border ${bgStyles[i] || 'bg-white border-slate-100'} flex items-center justify-between shadow-sm">
-                        <div class="flex items-center gap-2.5">
-                            <span class="text-2xl">${medals[i] || '🏅'}</span>
-                            <div>
-                                <div class="text-xs font-black uppercase tracking-wider text-slate-400">Rank #${i + 1}</div>
-                                <div class="text-sm font-extrabold">${d.name}</div>
-                            </div>
-                        </div>
-                        <div class="text-sm font-black text-pink-600 bg-white/80 px-2.5 py-1 rounded-xl border border-pink-100">
-                            €${d.total.toFixed(2)}
-                        </div>
+            gridEl.innerHTML = '';
+            const badges = ['🥇', '🥈', '🥉'];
+            
+            sorted.forEach(([name, amt], idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white/90 rounded-2xl p-3 border border-amber-200/60 shadow-sm flex items-center justify-between";
+                card.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <span class="text-xl">${badges[idx]}</span>
+                        <span class="font-extrabold text-slate-800 text-sm truncate">${name}</span>
                     </div>
+                    <span class="font-black text-emerald-600 text-sm">€${amt.toFixed(2)}</span>
                 `;
-                grid.insertAdjacentHTML('beforeend', card);
+                gridEl.appendChild(card);
+            });
+
+            emptyEl.classList.add('hidden');
+            gridEl.classList.remove('hidden');
+        }
+
+        function renderFeed(data) {
+            const feedEl = document.getElementById('feed');
+            const emptyEl = document.getElementById('feed-empty-msg');
+
+            feedEl.innerHTML = '';
+            if (!data || data.length === 0) {
+                emptyEl.innerText = translations[currentLang].emptyFeed;
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+
+            emptyEl.classList.add('hidden');
+
+            data.reverse().forEach(item => {
+                const row = document.createElement('div');
+                row.className = "bg-white/90 p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between";
+                row.innerHTML = `
+                    <div>
+                        <p class="font-black text-slate-800 text-sm">${item.fname || ''} ${item.lname || ''}</p>
+                        <p class="text-xs text-pink-600 font-bold mt-0.5">📅 ${item.date || ''} @ ${item.time || ''}</p>
+                    </div>
+                    <span class="text-xs font-black bg-pink-100 text-pink-700 px-2.5 py-1 rounded-lg">
+                        €${parseFloat(item.donation || 0).toFixed(2)}
+                    </span>
+                `;
+                feedEl.appendChild(row);
             });
         }
 
         async function handleSubmit(e) {
             e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70');
 
-            const newGuess = {
-                firstName: document.getElementById('input-fname').value,
-                lastName: document.getElementById('input-lname').value,
-                email: document.getElementById('input-email').value,
-                guessedDate: "'" + document.getElementById('input-date').value,
-                guessedTime: "'" + document.getElementById('input-time').value,
-                donationValue: parseFloat(document.getElementById('customDonation').value) || 0,
-                status: "Pending"
+            const fname = document.getElementById('input-fname').value;
+            const lname = document.getElementById('input-lname').value;
+            const email = document.getElementById('input-email').value;
+            const date = document.getElementById('input-date').value;
+            const time = document.getElementById('input-time').value;
+            const donation = document.getElementById('customDonation').value;
+
+            const payload = {
+                data: [{
+                    fname,
+                    lname,
+                    email,
+                    date,
+                    time,
+                    donation,
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                }]
             };
 
             try {
                 await fetch(SHEETDB_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: [newGuess] })
+                    body: JSON.stringify(payload)
                 });
 
+                // Open Revolut Link
                 window.open(REAL_PAYMENT_URL, '_blank');
-                document.getElementById('successModal').classList.remove('hidden');
 
+                document.getElementById('successModal').classList.remove('hidden');
                 document.getElementById('babyPoolForm').reset();
                 setDonation(10);
-
             } catch (err) {
-                console.error("Could not save guess:", err);
-                alert("Something went wrong saving your guess. Please try again.");
+                alert("Something went wrong saving your guess. Please try again!");
+                console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70');
             }
         }
 
         function closeSuccessModal() {
             document.getElementById('successModal').classList.add('hidden');
         }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            selectLanguage('en');
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            fetchLeaderboard();
+        });
     </script>
 </body>
 </html>
