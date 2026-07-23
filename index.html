@@ -71,8 +71,8 @@
 </head>
 <body class="min-h-screen text-slate-800 antialiased pb-16 selection:bg-pink-200">
 
-    <!-- LANGUAGE SELECTOR OVERLAY -->
-    <div id="languageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <!-- LANGUAGE SELECTOR OVERLAY (Always loads first on top of everything) -->
+    <div id="languageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
         <div class="bg-white/95 rounded-3xl max-w-sm w-full p-8 text-center shadow-2xl border border-pink-100 animate-pop">
             <div class="w-16 h-16 bg-gradient-to-tr from-pink-100 to-rose-200 text-pink-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-md shadow-pink-100">
                 🎀
@@ -121,8 +121,8 @@
         </div>
     </div>
 
-    <!-- MAIN APP CONTENT -->
-    <div id="mainContent" class="opacity-0 transition-opacity duration-500">
+    <!-- MAIN APP CONTENT (Hidden by default until language is selected) -->
+    <div id="mainContent" class="opacity-0 pointer-events-none transition-opacity duration-500">
         
         <!-- Top Language Switcher Bar -->
         <div class="max-w-5xl mx-auto px-4 pt-6 flex justify-end">
@@ -341,7 +341,6 @@
         function triggerEasterEgg(event) {
             secretClickCount++;
             
-            // Visual feedback on each click
             const title = document.getElementById('main-title');
             title.style.transform = `scale(${1 + secretClickCount * 0.03})`;
 
@@ -350,7 +349,6 @@
                 title.style.transform = 'scale(1)';
                 title.classList.add('title-glow');
 
-                // Burst of cute emojis around the clicked spot or center
                 const clickX = event ? event.clientX : window.innerWidth / 2;
                 const clickY = event ? event.clientY : window.innerHeight / 3;
 
@@ -361,15 +359,13 @@
                     el.className = 'easter-egg-particle';
                     el.innerText = particles[Math.floor(Math.random() * particles.length)];
                     
-                    // Position at click location
                     el.style.left = `${clickX}px`;
                     el.style.top = `${clickY}px`;
                     
-                    // Random burst distance
                     const angle = Math.random() * Math.PI * 2;
                     const distance = 120 + Math.random() * 220;
                     const tx = Math.cos(angle) * distance;
-                    const ty = Math.sin(angle) * distance - 60; // Bias slightly upward
+                    const ty = Math.sin(angle) * distance - 60;
 
                     el.style.setProperty('--tw-x', `${tx}px`);
                     el.style.setProperty('--tw-y', `${ty}px`);
@@ -377,11 +373,9 @@
 
                     document.body.appendChild(el);
 
-                    // Clean up particles
                     setTimeout(() => el.remove(), 1800);
                 }
 
-                // Remove the glowing title effect after 4 seconds
                 setTimeout(() => title.classList.remove('title-glow'), 4000);
             }
         }
@@ -548,8 +542,10 @@
 
             renderFAQs(dict.faqs);
 
+            // Hide the initial language modal and reveal full application interface
             document.getElementById('languageModal').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('opacity-0');
+            const mainEl = document.getElementById('mainContent');
+            mainEl.classList.remove('opacity-0', 'pointer-events-none');
         }
 
         function renderFAQs(faqs) {
@@ -657,7 +653,6 @@
                 return;
             }
 
-            // Aggregate donations per person
             const totals = {};
             data.forEach(item => {
                 const name = `${item.fname || ''} ${item.lname || ''}`.trim() || 'Anonymous';
@@ -751,7 +746,6 @@
                     body: JSON.stringify(payload)
                 });
 
-                // Open Revolut Link
                 window.open(REAL_PAYMENT_URL, '_blank');
 
                 document.getElementById('successModal').classList.remove('hidden');
@@ -770,9 +764,8 @@
             document.getElementById('successModal').classList.add('hidden');
         }
 
-        // Initialize App
+        // Initialize Countdown & Leaderboard Data
         window.addEventListener('DOMContentLoaded', () => {
-            selectLanguage('en');
             updateCountdown();
             setInterval(updateCountdown, 1000);
             fetchLeaderboard();
